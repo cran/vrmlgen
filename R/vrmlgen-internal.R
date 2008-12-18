@@ -6,54 +6,26 @@ function (x, filename)
     weights <- rep(1, nobs)
     nbins <- round((nobs > 500) * 8 * log(nobs)/ndim)
     if (nbins > 0) {
-        binning <- function(x, y, breaks, nbins) {
-            binning.3d <- function(x, y, breaks, nbins) {
-                f1 <- cut(x[, 1], breaks = breaks[, 1])
-                f2 <- cut(x[, 2], breaks = breaks[, 2])
-                f3 <- cut(x[, 3], breaks = breaks[, 3])
-                freq <- table(f1, f2, f3)
-                dimnames(freq) <- NULL
-                midpoints <- (breaks[-1, ] + breaks[-(nbins + 
-                  1), ])/2
-                z1 <- midpoints[, 1]
-                z2 <- midpoints[, 2]
-                z3 <- midpoints[, 3]
-                X <- as.matrix(expand.grid(z1, z2, z3))
-                X.f <- as.vector(freq)
-                id <- (X.f > 0)
-                X <- X[id, ]
-                dimnames(X) <- list(NULL, dimnames(x)[[2]])
-                X.f <- X.f[id]
-                result <- list(x = X, x.freq = X.f, midpoints = midpoints, 
-                  breaks = breaks, table.freq = freq)
-                if (!all(is.na(y))) {
-                  result$means <- as.numeric(tapply(y, list(f1, 
-                    f2, f3), mean))[id]
-                  result$devs <- as.numeric(tapply(y, list(f1, 
-                    f2, f3), function(x) sum((x - mean(x))^2)))[id]
-                }
-                result
-            }
-            if (missing(y)) 
-                y <- rep(NA, nrow(x))
-            if (missing(nbins)) 
-                nbins <- round(log(nrow(x))/log(2) + 1)
-            if (missing(breaks)) {
-                breaks <- cbind(seq(min(x[, 1]), max(x[, 1]), 
-                  length = nbins + 1), seq(min(x[, 2]), max(x[, 
-                  2]), length = nbins + 1))
-                if (ndim == 3) 
-                  breaks <- cbind(breaks, seq(min(x[, 3]), max(x[, 
-                    3]), length = nbins + 1))
-                breaks[1, ] <- breaks[1, ] - rep(10^(-5), ncol(breaks))
-            }
-            else nbins <- nrow(breaks) - 1
-            if (max(abs(breaks)) == Inf | is.na(max(abs(breaks)))) 
-                stop("illegal breaks")
-            result <- binning.3d(x, y, breaks = breaks, nbins = nbins)
-            result
-        }
-        bins <- binning(x, nbins = nbins)
+        breaks <- cbind(seq(min(x[, 1]), max(x[, 1]), length = nbins + 
+            1), seq(min(x[, 2]), max(x[, 2]), length = nbins + 
+            1))
+        f1 <- cut(x[, 1], breaks = breaks[, 1])
+        f2 <- cut(x[, 2], breaks = breaks[, 2])
+        f3 <- cut(x[, 3], breaks = breaks[, 3])
+        freq <- table(f1, f2, f3)
+        dimnames(freq) <- NULL
+        midpoints <- (breaks[-1, ] + breaks[-(nbins + 1), ])/2
+        z1 <- midpoints[, 1]
+        z2 <- midpoints[, 2]
+        z3 <- midpoints[, 3]
+        X <- as.matrix(expand.grid(z1, z2, z3))
+        X.f <- as.vector(freq)
+        id <- (X.f > 0)
+        X <- X[id, ]
+        dimnames(X) <- list(NULL, dimnames(x)[[2]])
+        X.f <- X.f[id]
+        bins <- list(x = X, x.freq = X.f, midpoints = midpoints, 
+            breaks = breaks, table.freq = freq)
         x <- bins$x
         weights <- bins$x.freq
         nx <- length(bins$x.freq)

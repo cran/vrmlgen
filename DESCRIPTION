@@ -1,16 +1,17 @@
 Package: vrmlgen
 Type: Package
-Title: Create plots, charts and graphs for 3D data visualization as
-        VRML files
-Version: 1.0
-Date: 2009-01-24
+Title: Convert 3D data matrices to VRML files
+Version: 1.1
+Date: 2008-12-18
 Author: Enrico Glaab
 Maintainer: <e.glaab@cs.nott.ac.uk>
 Suggests: misc3d
-Description: vrmlgen translates numerical data into 3-dimensional
-        representations like 3D scatter plots, meshes, bar charts and
-        graphs in the Virtual Reality Markup Language (VRML).
+Description: vrmlgen translates 3D point data, i.e. a numerical matrix
+        with 3 columns and n rows, into a visual representation in the
+        Virtual Reality Markup Language (VRML, filetype .wrl) or
+        alternatively, in the LiveGraphics3D format.
 License: GNU General Public License
-Packaged: Fri Mar 20 17:36:17 2009; egg
+URL: http://www.cs.nott.ac.uk/~egg/vrmlgen
+Packaged: Mon Oct 12 15:52:24 2009; egg
 Repository: CRAN
-Date/Publication: 2009-03-21 08:16:36
+Date/Publication: 2009-10-12 16:47:19

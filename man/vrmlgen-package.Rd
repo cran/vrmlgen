@@ -14,8 +14,8 @@ Supported visualization methods are 3D scatter plots, meshes, bar charts, graphs
 Package: \tab vrmlgen\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
-Date: \tab 2009-03-16\cr
-License: \tab GNU General Public License\cr
+Date: \tab 2009-04-04\cr
+License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
 }
@@ -38,5 +38,5 @@ y <- round(runif(33, 0, 2))
 y <- ifelse(y == 0, "class 1", ifelse(y == 1, "class 2", "class 3"))
 
 # create ouput using numbers from 1 to length(y) as metalabels
-vcloud(mat, y, col.axis="black", col.lab="blue", col.bg="white")
+vcloud(mat, y, metalabels=1:length(y), col.axis="black", col.lab="blue", col.bg="white")
 }
