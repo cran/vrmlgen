@@ -1,11 +1,12 @@
 `vbar` <-
 function (data, row.labels = rownames(data), col.labels = colnames(data), 
     metalabels = NULL, filename = "out.wrl", space = 0.5, cols = rainbow(length(as.matrix(data))), 
-    scalefac = 4, lab.axis = c("X-axis", "Y-axis", "Z-axis"), 
-    col.axis = "white", showaxis = TRUE, col.lab = "white", col.bg = "black", 
-    cex.lab = 1, cex.rowlab = 1, cex.collab = 1, navigation = "EXAMINE", 
-    fov = 0.785, pos = rep(scalefac + 4, 3), dir = c(-0.59, 0.77, 
-        0.24, 0.99), htmlout = NULL, hwidth = 1200, hheight = 800) 
+    rcols = NULL, ccols = NULL, scalefac = 4, lab.axis = c("X-axis", 
+        "Y-axis", "Z-axis"), col.axis = "white", showaxis = TRUE, 
+    col.lab = "white", col.bg = "black", cex.lab = 1, cex.rowlab = 1, 
+    cex.collab = 1, navigation = "EXAMINE", fov = 0.785, pos = rep(scalefac + 
+        4, 3), dir = c(-0.59, 0.77, 0.24, 0.99), htmlout = NULL, 
+    hwidth = 1200, hheight = 800, showlegend = TRUE) 
 {
     data <- as.matrix(data)
     data <- scalefac * (data/max(data))
@@ -87,11 +88,23 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
     }
     blength <- scalefac/(nrow(data) * (1 + space))
     bwidth <- scalefac/(ncol(data) * (1 + space))
-    if (!is.null(row.labels)) {
+    if (!is.null(row.labels) && showlegend) {
         for (j in 1:length(row.labels)) {
-            rcol <- (col2rgb(col.axis)/255)[1]
-            gcol <- (col2rgb(col.axis)/255)[2]
-            bcol <- (col2rgb(col.axis)/255)[3]
+            if (length(rcols) == length(row.labels)) {
+                rcol <- (col2rgb(rcols[j])/255)[1]
+                gcol <- (col2rgb(rcols[j])/255)[2]
+                bcol <- (col2rgb(rcols[j])/255)[3]
+            }
+            else if (length(rcols) == 1) {
+                rcol <- (col2rgb(rcols[1])/255)[1]
+                gcol <- (col2rgb(rcols[1])/255)[2]
+                bcol <- (col2rgb(rcols[1])/255)[3]
+            }
+            else {
+                rcol <- (col2rgb("black")/255)[1]
+                gcol <- (col2rgb("black")/255)[2]
+                bcol <- (col2rgb("black")/255)[3]
+            }
             cur_xwidth <- j/nrow(data) * scalefac - blength/2
             write(paste("Transform {\n\ttranslation ", cur_xwidth, 
                 scalefac + 0.2, -0.4, "\n\tscale ", cex.rowlab * 
@@ -102,11 +115,23 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
                 append = TRUE)
         }
     }
-    if (!is.null(col.labels)) {
+    if (!is.null(col.labels) && showlegend) {
         for (j in 1:length(col.labels)) {
-            rcol <- (col2rgb(col.axis)/255)[1]
-            gcol <- (col2rgb(col.axis)/255)[2]
-            bcol <- (col2rgb(col.axis)/255)[3]
+            if (length(ccols) == length(col.labels)) {
+                rcol <- (col2rgb(ccols[j])/255)[1]
+                gcol <- (col2rgb(ccols[j])/255)[2]
+                bcol <- (col2rgb(ccols[j])/255)[3]
+            }
+            else if (length(ccols) == 1) {
+                rcol <- (col2rgb(ccols[1])/255)[1]
+                gcol <- (col2rgb(ccols[1])/255)[2]
+                bcol <- (col2rgb(ccols[1])/255)[3]
+            }
+            else {
+                rcol <- (col2rgb("black")/255)[1]
+                gcol <- (col2rgb("black")/255)[2]
+                bcol <- (col2rgb("black")/255)[3]
+            }
             cur_ywidth <- j/ncol(data) * scalefac - bwidth/2
             write(paste("Transform {\n\ttranslation ", -0.4, 
                 scalefac + 0.2, cur_ywidth, "\n\tscale ", cex.collab * 
@@ -119,25 +144,64 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
     }
     popup_txt_str <- ""
     popup_txt_str2 <- ""
-    for (k in 1:ncol(data)) {
+    if (length(cols) >= (ncol(data) * nrow(data))) {
+        counter <- 0
         for (j in 1:nrow(data)) {
-            x <- j/nrow(data) * scalefac
-            z <- k/ncol(data) * scalefac
-            y <- data[j, k]/2
-            rcol <- (col2rgb(cols[(k - 1) * ncol(data) + j])/255)[1]
-            gcol <- (col2rgb(cols[(k - 1) * ncol(data) + j])/255)[2]
-            bcol <- (col2rgb(cols[(k - 1) * ncol(data) + j])/255)[3]
-            if (popuptext) {
-                popup_txt_str <- paste("Group {\n  children [\n    DEF Schalter", 
-                  (k - 1) * ncol(data) + j - 1, " TouchSensor { }", 
-                  sep = "", collapse = "")
-                popup_txt_str2 <- "\n]\n}"
+            for (k in 1:ncol(data)) {
+                x <- j/nrow(data) * scalefac
+                z <- k/ncol(data) * scalefac
+                y <- data[j, k]/2
+                counter <- counter + 1
+                rcol <- (col2rgb(cols[counter])/255)[1]
+                gcol <- (col2rgb(cols[counter])/255)[2]
+                bcol <- (col2rgb(cols[counter])/255)[3]
+                if (popuptext) {
+                  popup_txt_str <- paste("Group {\n  children [\n    DEF Schalter", 
+                    (k - 1) * ncol(data) + j - 1, " TouchSensor { }", 
+                    sep = "", collapse = "")
+                  popup_txt_str2 <- "\n]\n}"
+                }
+                write(paste(popup_txt_str, "Transform {\n\ttranslation ", 
+                  x, y, z, "\n\tchildren Shape {\n\t\tappearance Appearance { material Material { diffuseColor ", 
+                  rcol, gcol, bcol, " } }\n\tgeometry Box { size ", 
+                  blength, data[j, k], bwidth, "}\n\t\t}\n}", 
+                  popup_txt_str2, sep = " "), file = filename, 
+                  append = TRUE)
             }
-            write(paste(popup_txt_str, "Transform {\n\ttranslation ", 
-                x, y, z, "\n\tchildren Shape {\n\t\tappearance Appearance { material Material { diffuseColor ", 
-                rcol, gcol, bcol, " } }\n\tgeometry Box { size ", 
-                blength, data[j, k], bwidth, "}\n\t\t}\n}", popup_txt_str2, 
-                sep = " "), file = filename, append = TRUE)
+        }
+    }
+    else {
+        rcol <- NULL
+        gcol <- NULL
+        bcol <- NULL
+        if (length(cols) >= 1) {
+            rcol <- (col2rgb(cols[1])/255)[1]
+            gcol <- (col2rgb(cols[1])/255)[2]
+            bcol <- (col2rgb(cols[1])/255)[3]
+        }
+        else {
+            rcol <- (col2rgb("lightblue")/255)[1]
+            gcol <- (col2rgb("lightblue")/255)[2]
+            bcol <- (col2rgb("lightblue")/255)[3]
+        }
+        for (j in 1:nrow(data)) {
+            for (k in 1:ncol(data)) {
+                x <- j/nrow(data) * scalefac
+                z <- k/ncol(data) * scalefac
+                y <- data[j, k]/2
+                if (popuptext) {
+                  popup_txt_str <- paste("Group {\n  children [\n    DEF Schalter", 
+                    (k - 1) * ncol(data) + j - 1, " TouchSensor { }", 
+                    sep = "", collapse = "")
+                  popup_txt_str2 <- "\n]\n}"
+                }
+                write(paste(popup_txt_str, "Transform {\n\ttranslation ", 
+                  x, y, z, "\n\tchildren Shape {\n\t\tappearance Appearance { material Material { diffuseColor ", 
+                  rcol, gcol, bcol, " } }\n\tgeometry Box { size ", 
+                  blength, data[j, k], bwidth, "}\n\t\t}\n}", 
+                  popup_txt_str2, sep = " "), file = filename, 
+                  append = TRUE)
+            }
         }
     }
     write("\n", file = filename, append = TRUE)
@@ -160,5 +224,7 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
             file = htmlout, append = TRUE)
         cat("</BODY></HTML>", file = htmlout, append = TRUE)
     }
+    cat(paste("\nOutput file \"", filename, "\" was generated.\n", 
+        sep = ""))
 }
 

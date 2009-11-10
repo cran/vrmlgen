@@ -6,7 +6,7 @@ function (data, labels = rownames(data), metalabels = NULL, filename = "out.wrl"
     col.lab = "white", col.bg = "black", cex.lab = 1, navigation = "EXAMINE", 
     transparency = 0, fov = 0.785, pos = rep(scalefac + 4, 3), 
     dir = c(-0.59, 0.77, 0.24, 0.99), htmlout = NULL, hwidth = 1200, 
-    hheight = 800) 
+    hheight = 800, showlegend = TRUE) 
 {
     data <- as.matrix(data)
     if (ncol(data) != 3) {
@@ -54,7 +54,7 @@ function (data, labels = rownames(data), metalabels = NULL, filename = "out.wrl"
     write(paste("Background {\n\t skyColor [\n\t\t ", bg_rcol, 
         bg_gcol, bg_bcol, " \n\t]\n}", sep = " "), file = filename, 
         append = TRUE)
-    if (length(labels)) {
+    if (length(labels) && showlegend) {
         cur_height <- scalefac + 1.2
         for (j in 1:length(unique(labels))) {
             rcol <- (col2rgb(cols[unique(numlabels)[j]])/255)[1]
@@ -277,5 +277,7 @@ function (data, labels = rownames(data), metalabels = NULL, filename = "out.wrl"
             file = htmlout, append = TRUE)
         cat("</BODY></HTML>", file = htmlout, append = TRUE)
     }
+    cat(paste("\nOutput file \"", filename, "\" was generated.\n", 
+        sep = ""))
 }
 

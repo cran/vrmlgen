@@ -1,13 +1,24 @@
 \name{vbar}
 \alias{vbar}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Visualize numerical data and parametric functions in VRML-files}
+\title{ Create bar plots and height maps in VRML-format}
 \description{
   vbar visualizes numerical data as bar charts and terrain plots and parametric functions as 3D-graphs
   in VRML-files.  
 }
 \usage{
-vbar(data, row.labels = rownames(data), col.labels = colnames(data), metalabels = NULL, filename = "out.wrl", space = 0.5, cols = rainbow(length(as.matrix(data))), scalefac = 4, lab.axis = c("X-axis", "Y-axis", "Z-axis"), col.axis = "white", showaxis = TRUE, col.lab = "white", col.bg = "black", cex.lab = 1, cex.rowlab = 1, cex.collab = 1, navigation = "EXAMINE", fov = 0.785, pos = rep(scalefac + 4, 3), dir = c(-0.59, 0.77, 0.24, 0.99), htmlout = NULL, hwidth = 1200, hheight = 800)
+vbar(data, row.labels = rownames(data),
+col.labels = colnames(data), metalabels = NULL,
+filename = "out.wrl",  space = 0.5,
+cols = rainbow(length(as.matrix(data))), rcols = NULL,
+ccols = NULL, scalefac = 4, lab.axis = c("X-axis",
+"Y-axis", "Z-axis"), col.axis = "white",
+showaxis = TRUE, col.lab = "white", col.bg = "black",
+cex.lab = 1, cex.rowlab= 1, cex.collab = 1,
+navigation = "EXAMINE", fov = 0.785, 
+pos = rep(scalefac + 4, 3), dir = c(-0.59, 0.77, 0.24, 0.99),
+htmlout = NULL, hwidth = 1200, hheight = 800,
+showlegend = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -27,6 +38,12 @@ vbar(data, row.labels = rownames(data), col.labels = colnames(data), metalabels 
    among the data points. The number of colors should be at least
    as large as the number of different labels (i.e. length(col)
    >= length(unique(labels)) }
+  \item{rcols}{ specifies the bar colors per row of the
+   input matrix. The number of colors must correspond to the
+   numbers of rows of the data matrix. }
+  \item{ccols}{ specifies the bar colors per column of the
+   input matrix. The number of colors must correspond to the
+   numbers of columns of the data matrix.}   
   \item{scalefac}{ a scaling factor for the size of the 3D box in
    which the data will be visualized }
   \item{lab.axis}{ a vector of size 3 containing the axis 
@@ -34,7 +51,7 @@ vbar(data, row.labels = rownames(data), col.labels = colnames(data), metalabels 
   \item{col.axis}{ color of the axis }
   \item{showaxis}{ if FALSE, the coordinate axes are hidden in
    the output}  
-  \item{col.lab}{ color of the axis labels }
+  \item{col.lab}{ a vector of colors specifying the axis labels }
   \item{col.bg}{ background color }  
   \item{cex.lab}{ scaling factor for axis label font size }
   \item{cex.rowlab}{ scaling factor for matrix row labels font
@@ -53,15 +70,21 @@ vbar(data, row.labels = rownames(data), col.labels = colnames(data), metalabels 
   \item{htmlout}{ a filename for generating an HTML-file to embed the VRML-output }
   \item{hwidth}{ width of the embedded VRML-display in the HTML-output }
   \item{hheight}{ height of the embedded VRML-display in the HTML-output }
+  \item{showlegend}{ a logical value indicating whether a legend should
+  be drawn on the plot}  
+}
+\details{
 }
 \value{
-  The function is used for its side-effect (output of a VRML-file in the specified directory) and has no return value.
+  The function is used for its side-effect (output of a VRML-file in
+  the specified directory) and has no return value. The htmlout-parameter
+  can be used to embed the resulting VRML-object in a HTML-file.
 }
 \references{ }
 \author{ Enrico Glaab }
 \note{
 }
-\seealso{ \code{\link{vcloud}, \link{lcloud}, \link{lbar}} }
+\seealso{ \link{vcloud}, \link{lcloud}, \link{lbar} }
 \examples{
 # visualize volcano data height-map
 vbar(volcano)
@@ -70,7 +93,8 @@ vbar(volcano)
 mat <- matrix(9:1, nrow=3)
 rownames(mat) <- paste('row',1:3)
 colnames(mat) <- paste('col',1:3)
-vbar(mat, space=1, metalabels=1:9, col.bg="white", col.axis="blue", col.lab="black")
+vbar(mat, space=1, metalabels=1:9, col.bg="white", col.axis="blue",
+col.lab="black")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
