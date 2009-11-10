@@ -10,12 +10,13 @@ vmesh(infile = NULL, data = NULL, edges = NULL,
 xfun = "sin(v)*cos(u)", yfun = "sin(v)*sin(u)",
  zfun = "cos(v)", param1 = "u", param2 = "v",
 range1 = c(0,2*pi), range2 = c(0,pi), size1 = 30,
-size2 = 30, filename = "out.wrl", cols = NULL,
-scalefac = 4, lab.axis = c("X-axis", "Y-axis",
-"Z-axis"), col.axis = "white", showaxis = TRUE,
+size2 = 30, filename = "out.wrl", cols = "red",
+scalefac = 4, autoscale=ifelse(is.null(infile),
+"independent","equicenter"), lab.axis = c("X-axis",
+"Y-axis", "Z-axis"), col.axis = "white", showaxis = TRUE,
 col.lab = "white", col.bg = "black", cex.lab = 1,
 navigation = "EXAMINE", transparency = 0, fov = 0.785,
-pos = rep(scalefac + 4, 3), dir = c(-0.59, 0.77, 0.24, 0.99),
+pos = rep(scalefac + 4, 3), dir = c(0.19, 0.45, 0.87, 2.45),
 htmlout = NULL, hwidth = 1200, hheight = 800)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -54,6 +55,11 @@ htmlout = NULL, hwidth = 1200, hheight = 800)
   >= length(unique(labels)) }
   \item{scalefac}{ a scaling factor for the size of the 3D box in
    which the data will be visualized }
+  \item{autoscale}{ the scaling type. "independent" means all axes
+   are auto-scaled independently, "equidist" means all axes are
+   scaled by the same factor, "equicenter" additionally positions
+   the drawn object in the center, "none" means no scaling is
+   applied}
   \item{lab.axis}{ a vector of size 3 containing the axis labels }
   \item{col.axis}{ color of the axis }
   \item{showaxis}{ if FALSE, the coordinate axes are hidden in

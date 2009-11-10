@@ -1,10 +1,15 @@
+# helper function for density estimation contour surface computation
 `.vdense` <-
 function (x, filename) 
 {
     nobs <- nrow(x)
     ndim <- ncol(x)
     weights <- rep(1, nobs)
+    
+    # compute number of bins (depending on number of observations)
     nbins <- round((nobs > 500) * 8 * log(nobs)/ndim)
+    
+    # compute number of breaks    
     if (nbins > 0) {
         breaks <- cbind(seq(min(x[, 1]), max(x[, 1]), length = nbins + 
             1), seq(min(x[, 2]), max(x[, 2]), length = nbins + 
@@ -33,15 +38,20 @@ function (x, filename)
     else nx <- nobs
     h <- .hnorm(x, weights)
     rawdata <- list(nbins = nbins, x = x, nobs = nobs, ndim = ndim)
+    
+    # calculate density estimation contours
     est <- .vdensecalc(x, h = h, weights = weights, rawdata = rawdata, 
         filename = filename)
     return(TRUE)
 }
 
+# compute density estimation contour surfaces
 `.vdensecalc` <-
 function (x, h = .hnorm(x, weights), eval.points = NULL, weights = rep(1, 
     length(x)), rawdata = list(), eval.type = "grid", filename = "test.wrl") 
 {
+    
+    # intial settings
     xlim <- range(x[, 1])
     ylim <- range(x[, 2])
     zlim <- range(x[, 3])
@@ -55,6 +65,8 @@ function (x, h = .hnorm(x, weights), eval.points = NULL, weights = rep(1,
     n <- nrow(x)
     nnew <- nrow(eval.points)
     hmult <- 1
+    
+    # compute density estimation    
     result <- list(eval.points = eval.points, h = h * hmult, 
         h.weights = h.weights, weights = weights)
     Wh <- matrix(rep(h.weights, nnew), ncol = n, byrow = TRUE)
@@ -78,6 +90,8 @@ function (x, h = .hnorm(x, weights), eval.points = NULL, weights = rep(1,
     est <- .vdensecalc(x, h, x, eval.type = "points", weights = weights, 
         filename = filename)
     props <- c(75, 50, 25)
+    
+    # set colors for different density levels
     cols <- topo.colors(length(props))
     alpha <- seq(1, 0.5, length = length(props))
     levels <- quantile(est, props/100)
@@ -85,10 +99,14 @@ function (x, h = .hnorm(x, weights), eval.points = NULL, weights = rep(1,
         (2 * pi)^1.5 * h[1] * h[2] * h[3] * hmult^3))
     est <- array(c(est), dim = rep(ngrid, 3))
     struct <- NULL
+    
+    # use misc3d to compute the final contours
     if (require(misc3d)) {
         struct <- contour3d(est, levels, eval.points[, 1], eval.points[, 
             2], eval.points[, 3], engine = "none")
     }
+    
+    # write output to VRML file
     for (i in 1:length(props)) {
         if (length(props) > 1) 
             strct <- struct[[i]]
@@ -103,20 +121,23 @@ function (x, h = .hnorm(x, weights), eval.points = NULL, weights = rep(1,
         rcol <- (col2rgb(cols[i])/255)[1]
         gcol <- (col2rgb(cols[i])/255)[2]
         bcol <- (col2rgb(cols[i])/255)[3]
+        
+        # write contours to VRML file
         for (j in seq(1, length(trngs.x), 3)) {
             write(paste("\n Shape { \n\tappearance Appearance {\n\t\t material Material {\n\t\tdiffuseColor ", 
                 rcol, " ", gcol, " ", bcol, "\n\t\ttransparency ", 
                 alpha[i], " \n\t}\n\t}\t\n \n\t geometry IndexedFaceSet {\n\t \t\tsolid TRUE \t \n\t\tcoord Coordinate {\n\t\t\t point [\n\t\t\t ", 
-                trngs.x[j], trngs.z[j], trngs.y[j], " \n\t\t\t  ", 
-                trngs.x[j + 1], trngs.z[j + 1], trngs.y[j + 1], 
-                " \n\t\t\t  ", trngs.x[j + 2], trngs.z[j + 2], 
-                trngs.y[j + 2], " \n\t\t ]\n\t }\n\t coordIndex [\t0 1 2\t] \n\t}\t \n }\n ", 
+                trngs.x[j], trngs.y[j], trngs.z[j], " \n\t\t\t  ", 
+                trngs.x[j + 1], trngs.y[j + 1], trngs.z[j + 1], 
+                " \n\t\t\t  ", trngs.x[j + 2], trngs.y[j + 2], 
+                trngs.z[j + 2], " \n\t\t ]\n\t }\n\t coordIndex [\t0 1 2\t] \n\t}\t \n }\n ", 
                 sep = " "), file = filename, append = TRUE)
         }
     }
     return(est)
 }
 
+# helper function for density estimation contour surface computation
 `.hnorm` <-
 function (x, weights = NA) 
 {

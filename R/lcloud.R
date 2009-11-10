@@ -1,31 +1,46 @@
 `lcloud` <-
 function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL, 
     filename = "out.m", pointstyle = c("s", "b", "t"), cols = rainbow(length(unique(labels))), 
-    scalefac = 4, lab.axis = c("X-axis", "Y-axis", "Z-axis"), 
-    col.axis = "black", showaxis = TRUE, col.lab = "black", col.metalab = "black", 
-    col.bg = "white", cex.lab = 1, ambientlight = 0.5, htmlout = NULL, 
-    hwidth = 1200, hheight = 800, mode2d = FALSE, showlegend = TRUE) 
+    scalefac = 4, autoscale = "independent", lab.axis = c("X-axis", 
+        "Y-axis", "Z-axis"), col.axis = "black", showaxis = TRUE, 
+    col.lab = "black", col.metalab = "black", col.bg = "white", 
+    cex.lab = 1, ambientlight = 0.5, htmlout = NULL, hwidth = 1200, 
+    hheight = 800, mode2d = FALSE, showlegend = TRUE) 
 {
+    
     data <- as.matrix(data)
     if ((ncol(data) != 3) && !mode2d) {
         stop("Data matrix does not have 3 columns!")
     }
+    
+    # identify unique set of row labels
     numlabels <- NULL
     if (length(labels)) {
         lab <- unique(unlist(labels))
         numlabels <- apply(as.matrix(labels), 1, function(x) match(x, 
             as.matrix(lab)))
     }
+    
+    # apply the chosen scaling method
     scaledat <- function(data) {
-        return(scalefac * (data - min(data))/(max(data) - min(data)))
+        diff <- max(data) - min(data)
+        if (diff == 0) 
+            return(data)
+        else return(scalefac * (data - min(data))/(diff))
     }
-    data <- apply(data, 2, scaledat)
+    
+    if (autoscale == "independent") 
+        data <- apply(data, 2, scaledat)
+    else if (autoscale == "equidist") 
+        data <- scalefac * (data/max(data))
+    
+    # adjusts settings if 2D-mode is selected
     if (mode2d) {
         if ((ncol(data) < 2)) {
             stop("Data matrix does not have 2 columns!")
         }
         if (ncol(data) == 2) {
-            data <- rbind(data, rep(0, nrow(data)))
+            data <- cbind(data, rep(0, nrow(data)))
         }
         else {
             data[, 3] <- rep(0, nrow(data))
@@ -37,17 +52,24 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
         lab.axis[1] <- lab.axis[2]
         lab.axis[2] <- tmpdat
     }
+    
+    # write LiveGraphics3D header
     write("Graphics3D[\n", file = filename, append = FALSE)
     write("{\n", file = filename, append = TRUE)
+        
+    # set background color
     bg_rcol <- (col2rgb(col.bg)/255)[1]
     bg_gcol <- (col2rgb(col.bg)/255)[2]
     bg_bcol <- (col2rgb(col.bg)/255)[3]
+    
+    # create the plot legend (3D-mode)
     if (length(labels) && !mode2d && showlegend) {
         cur_height <- scalefac + 1 + cex.lab/5
         for (j in 1:length(unique(labels))) {
             rcol <- (col2rgb(cols[unique(numlabels)[j]])/255)[1]
             gcol <- (col2rgb(cols[unique(numlabels)[j]])/255)[2]
             bcol <- (col2rgb(cols[unique(numlabels)[j]])/255)[3]
+            
             write(paste("RGBColor[", rcol, ",", gcol, ",", bcol, 
                 "], Text [ \"", unique(labels)[j], "\", {0,0,", 
                 cur_height, " }],\n", sep = ""), file = filename, 
@@ -55,12 +77,15 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
             cur_height <- cur_height + 0.4
         }
     }
+    
+    # create the plot legend (2D-mode)
     if (length(labels) && mode2d && showlegend) {
         cur_height <- 0
         for (j in 1:length(unique(labels))) {
             rcol <- (col2rgb(cols[unique(numlabels)[j]])/255)[1]
             gcol <- (col2rgb(cols[unique(numlabels)[j]])/255)[2]
             bcol <- (col2rgb(cols[unique(numlabels)[j]])/255)[3]
+            
             write(paste("RGBColor[", rcol, ",", gcol, ",", bcol, 
                 "], Text [StyleForm[\"", unique(labels)[j], "\", FontSize->12], {", 
                 cur_height, ",", scalefac + 1.3, ",0 }],\n", 
@@ -70,6 +95,10 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
                   nchar(unique(labels)[j + 1])/2)
         }
     }
+    
+    
+    # draw the axes
+    
     lab_rcol <- NULL
     lab_gcol <- NULL
     lab_bcol <- NULL
@@ -77,18 +106,23 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
     ax_gcol <- NULL
     ax_bcol <- NULL
     if (showaxis) {
+        
         lab_rcol <- (col2rgb(col.lab)/255)[1]
         lab_gcol <- (col2rgb(col.lab)/255)[2]
         lab_bcol <- (col2rgb(col.lab)/255)[3]
+        
+        # draw x-axis label
         if (mode2d) 
             write(paste("RGBColor[", lab_rcol, ",", lab_gcol, 
-                ",", lab_bcol, "], Text [ \"", lab.axis[2], "\", {", 
-                scalefac + 0.5 + 0.028 * nchar(lab.axis[2]), 
+                ",", lab_bcol, "], Text [ \"", lab.axis[1], "\", {", 
+                scalefac + 0.5 + 0.028 * nchar(lab.axis[1]), 
                 ",0,0 }],\n", sep = ""), file = filename, append = TRUE)
         else write(paste("RGBColor[", lab_rcol, ",", lab_gcol, 
-            ",", lab_bcol, "], Text [ \"", lab.axis[2], "\", {", 
+            ",", lab_bcol, "], Text [ \"", lab.axis[1], "\", {", 
             scalefac + 0.5, ",0,0 }],\n", sep = ""), file = filename, 
             append = TRUE)
+            
+        # draw y-axis label            
         if (mode2d) {
             write(paste("RGBColor[1.0,0.0,0.0], Text [StyleForm[\"Press SHIFT + left mouse button,\", FontSize->12], {0.8,", 
                 scalefac + 0.9, ",0 }],\n", sep = ""), file = filename, 
@@ -97,39 +131,54 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
                 scalefac + 0.7, ",0 }],\n", sep = ""), file = filename, 
                 append = TRUE)
             write(paste("RGBColor[", lab_rcol, ",", lab_gcol, 
-                ",", lab_bcol, "], Text [ \"", lab.axis[1], "\", {0,", 
+                ",", lab_bcol, "], Text [ \"", lab.axis[2], "\", {0,", 
                 scalefac + 0.3, ",0 }],\n", sep = ""), file = filename, 
                 append = TRUE)
         }
         else {
             write(paste("RGBColor[", lab_rcol, ",", lab_gcol, 
-                ",", lab_bcol, "], Text [ \"", lab.axis[1], "\", {0,", 
+                ",", lab_bcol, "], Text [ \"", lab.axis[2], "\", {0,", 
                 scalefac + 0.5, ",0 }],\n", sep = ""), file = filename, 
                 append = TRUE)
         }
+        
+        # draw z-axis label
         if (!mode2d) 
             write(paste("RGBColor[", lab_rcol, ",", lab_gcol, 
                 ",", lab_bcol, "], Text [ \"", lab.axis[3], "\", {0, 0,", 
                 scalefac + 0.5, " }],\n", sep = ""), file = filename, 
                 append = TRUE)
+                
+                
         ax_rcol <- (col2rgb(col.axis)/255)[1]
         ax_gcol <- (col2rgb(col.axis)/255)[2]
         ax_bcol <- (col2rgb(col.axis)/255)[3]
+        
+        # draw x-axis
         write(paste("Thickness[0.005], RGBColor[", ax_rcol, ",", 
             ax_gcol, ",", ax_bcol, "], Line[{{0,0,0},{", scalefac, 
             ",0,0}}],", sep = " "), file = filename, append = TRUE)
+            
+	# draw y-axis            
         write(paste("Thickness[0.005], RGBColor[", ax_rcol, ",", 
             ax_gcol, ",", ax_bcol, "], Line[{{0,0,0},{0,", scalefac, 
             ",0}}],", sep = " "), file = filename, append = TRUE)
+            
+	# draw z-axis (only in 3D mode)
         if (!mode2d) 
             write(paste("Thickness[0.005], RGBColor[", ax_rcol, 
                 ",", ax_gcol, ",", ax_bcol, "], Line[{{0,0,0},{0,0,", 
                 scalefac, "}}],", sep = " "), file = filename, 
                 append = TRUE)
     }
+    
+    # drawing a single point with a given point-style
     single_pointstyle <- function(pointstyle, x, y, z, rcol, 
         gcol, bcol, filename) {
-        if (pointstyle == "t") {
+        
+        # tetrahedron point style
+        if (pointstyle == "t") {            
+            
             write(paste("{ SurfaceColor[RGBColor[", rcol, ",", 
                 gcol, ",", bcol, "]], Polygon[{{", x, ", ", y, 
                 ",", z + 0.06415, "}, {", x + 0.09072222, ",", 
@@ -148,13 +197,19 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
                   0.15713333, ",", z - 0.096225, "}}] },\n", 
                 sep = ""), file = filename, append = TRUE)
         }
+        
+        # sphere point style
         else if (pointstyle == "s") {
+            
             write(paste("PointSize[", 0.08/scalefac, "], RGBColor[", 
                 rcol, ",", gcol, ",", bcol, "],  Point[{", x, 
                 ",", y, ",", z, "}],", sep = ""), file = filename, 
                 append = TRUE)
         }
+        
+        # cube point style        
         else {
+        
             write(paste("SurfaceColor[RGBColor[", rcol, ",", 
                 gcol, ",", bcol, "]], Cuboid[{", x - 0.04, ",", 
                 y - 0.04, ",", z - 0.04, "},{", x + 0.04, ",", 
@@ -162,22 +217,33 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
                 append = TRUE)
         }
     }
+    
+    # drawing a single point with a given point-style (2D mode)
     single_pointstyle2d <- function(pointstyle, x, y, z, rcol, 
         gcol, bcol, filename) {
+        
+        # triangle point style
         if (pointstyle == "t") {
+           
             write(paste("{ SurfaceColor[RGBColor[", rcol, ",", 
                 gcol, ",", bcol, "]], Polygon[{{", x - 0.06, 
                 ", ", y - 0.06, ",", z, "}, {", x + 0.06, ",", 
                 y - 0.06, ",", z, "}, {", x, ",", y + 0.06, ",", 
                 z, "}}] },\n", sep = ""), file = filename, append = TRUE)
         }
+        
+        # circle point style
         else if (pointstyle == "s") {
+            
             write(paste("PointSize[", 0.08/scalefac, "], RGBColor[", 
                 rcol, ",", gcol, ",", bcol, "],  Point[{", x, 
                 ",", y, ",", z, "}],", sep = ""), file = filename, 
                 append = TRUE)
         }
+        
+        # square point style
         else {
+            
             write(paste("SurfaceColor[RGBColor[", rcol, ",", 
                 gcol, ",", bcol, "]], Polygon[{{", x - 0.04, 
                 ",", y - 0.04, ",", z, "},{", x + 0.04, ",", 
@@ -186,13 +252,20 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
                 z, "}}],", sep = ""), file = filename, append = TRUE)
         }
     }
+    
+    # use empty metalabels if only url-labels have been defined    
     if ((length(metalabels) == 0) && (length(urllabels) >= 1)) {
         metalabels <- rep("  ", length(urllabels))
     }
+    
+    # main loop: iterate over data points    
     for (j in 1:nrow(data)) {
-        x <- data[j, 2]
-        y <- data[j, 1]
+    
+        x <- data[j, 1]
+        y <- data[j, 2]
         z <- data[j, 3]
+        
+        # set data point color
         rcol <- NULL
         gcol <- NULL
         bcol <- NULL
@@ -217,7 +290,10 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
             gcol <- (col2rgb(cols[j])/255)[2]
             bcol <- (col2rgb(cols[j])/255)[3]
         }
+        
+        # draw data point with given point-style
         if (length(pointstyle) == 1) {
+            
             if (!mode2d) 
                 single_pointstyle(pointstyle, x, y, z, rcol, 
                   gcol, bcol, filename)
@@ -225,9 +301,13 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
                 gcol, bcol, filename)
         }
         else if (length(pointstyle) >= length(unique(numlabels))) {
+            
             if (length(labels)) {
+                
                 stylevec <- c("s", "b", "t")
                 curstyle <- stylevec[numlabels[j]]
+                
+                # tetrahedron style
                 if (curstyle == "t") {
                   if (!mode2d) 
                     write(paste("{ SurfaceColor[RGBColor[", rcol, 
@@ -256,12 +336,16 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
                     x, ",", y + 0.06, ",", z, "}}] },\n", sep = ""), 
                     file = filename, append = TRUE)
                 }
+                
+                # sphere style
                 else if (curstyle == "s") {
                   write(paste("PointSize[", 0.08/scalefac, "], RGBColor[", 
                     rcol, ",", gcol, ",", bcol, "],  Point[{", 
                     x, ",", y, ",", z, "}],", sep = ""), file = filename, 
                     append = TRUE)
                 }
+                
+                # cube style
                 else {
                   if (!mode2d) 
                     write(paste("SurfaceColor[RGBColor[", rcol, 
@@ -279,6 +363,7 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
                     file = filename, append = TRUE)
                 }
             }
+            # use single point-style if no labels have been defined            
             else {
                 if (!mode2d) 
                   single_pointstyle(pointstyle[1], x, y, z, rcol, 
@@ -287,6 +372,8 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
                   z, rcol, gcol, bcol, filename)
             }
         }
+        # if there are more unique labels than available point-styles,
+        # use a single point-style
         else {
             if (!mode2d) 
                 single_pointstyle(pointstyle[1], x, y, z, rcol, 
@@ -294,21 +381,29 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
             else single_pointstyle2d(pointstyle[1], x, y, z, 
                 rcol, gcol, bcol, filename)
         }
+        
+        # add meta-labels and url-labels to the plot
         if (length(metalabels) >= j) {
+        
             frcol <- (col2rgb(col.metalab)/255)[1]
             fgcol <- (col2rgb(col.metalab)/255)[2]
             fbcol <- (col2rgb(col.metalab)/255)[3]
+            
             write(paste("Text[StyleForm[\"", metalabels[j], "\",FontFamily -> \"Arial\", FontWeight->\"Bold\", FontColor -> RGBColor[", 
                 frcol, ",", fgcol, ",", fbcol, "], FontSize->9,", 
                 sep = ""), file = filename, append = TRUE)
+            
             if (length(urllabels) >= j) {
                 write(paste("URL -> \"", urllabels[j], ",target=_blank\",", 
                   sep = ""), file = filename, append = TRUE)
             }
+            
             write(paste("],{", x, ",", y, ",", z, "}],", sep = ""), 
                 file = filename, append = TRUE)
         }
     }
+    
+    # configure general plot settings (font size, text style, etc.)
     if (mode2d) 
         write(paste("\n}, ViewPoint->{0,0,10},ViewVertical->{0,1,0}, Boxed -> False, Axes -> False, AmbientLight->GrayLevel[", 
             ambientlight, "], TextStyle -> {FontFamily -> \"TimesRoman\", FontSlant ->\"Italic\", FontSize -> ", 
@@ -318,6 +413,8 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
         ambientlight, "], TextStyle -> {FontFamily -> \"TimesRoman\", FontSlant ->\"Italic\", FontSize -> ", 
         14 * cex.lab, "}, Lighting -> True, BoxRatios -> Automatic, PlotRange -> All ]\n", 
         sep = ""), file = filename, append = TRUE)
+        
+    # create HTML output       
     if (!is.null(htmlout)) {
         cat("<HTML>", file = htmlout, append = FALSE)
         cat("<HEAD><TITLE>VRMLGen-visualization</TITLE></HEAD><BODY>", 
@@ -339,7 +436,9 @@ function (data, labels = rownames(data), metalabels = NULL, urllabels = NULL,
         cat("</APPLET></BODY>", file = htmlout, append = TRUE)
         cat("</HTML>", file = htmlout, append = TRUE)
     }
-    cat(paste("\nOutput file \"", filename, "\" was generated.\n", 
+    
+    # show success message
+    cat(paste("\nOutput file \"", filename, "\" was generated.\n\nPlease make sure that the output folder contains a copy of the \"live.jar\" file\navailable at: http://www.vis.uni-stuttgart.de/~kraus/LiveGraphics3D/download.html.\n\n", 
         sep = ""))
 }
 

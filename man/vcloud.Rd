@@ -10,11 +10,12 @@ into visual representations in the Virtual Reality Markup Language (VRML).
 vcloud(data, labels = rownames(data), metalabels = NULL,
 filename = "out.wrl", pointstyle = c("s", "b", "c"), cols
 = rainbow(length(unique(labels))), showdensity = FALSE,
-scalefac = 4, lab.axis = c("X-axis", "Y-axis", "Z-axis"),
+scalefac = 4, autoscale = "independent", 
+lab.axis = c("X-axis", "Y-axis", "Z-axis"),
 col.axis = "white", showaxis = TRUE, col.lab = "white",
 col.bg = "black", cex.lab = 1, navigation = "EXAMINE",
 transparency = 0, fov = 0.785, pos = rep(scalefac + 4, 3),
-dir = c(-0.59, 0.77, 0.24, 0.99), htmlout = NULL, hwidth
+dir = c(0.19, 0.45, 0.87, 2.45), htmlout = NULL, hwidth
 = 1200, hheight = 800, showlegend = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -41,6 +42,9 @@ dir = c(-0.59, 0.77, 0.24, 0.99), htmlout = NULL, hwidth
    density (requires misc3d-package)}
   \item{scalefac}{ a scaling factor for the size of the 3D box in
    which the data will be visualized }
+  \item{autoscale}{ the scaling type. "independent" means all axes
+   are auto-scaled independently, "equidist" means all axes are
+   scaled by the same factor, "none" means no scaling is applied } 
   \item{lab.axis}{ a vector of size 3 containing the axis labels }
   \item{col.axis}{ color of the axis }
   \item{showaxis}{ if FALSE, the coordinate axes are hidden in

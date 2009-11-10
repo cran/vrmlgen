@@ -7,55 +7,89 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
     cex.collab = 1, ambientlight = 0.5, htmlout = NULL, hwidth = 1200, 
     hheight = 800, showlegend = TRUE) 
 {
+    
     data <- as.matrix(data)
+    
+    # scale the data to fit within the axes ranges
     data <- scalefac * (data/max(data))
+    
+    # write LiveGraphics3D header
     write("Graphics3D[\n", file = filename, append = FALSE)
     write("{\n", file = filename, append = TRUE)
+    
+    # pre-process row- and column-labels
     if (!is.null(col.labels) && showlegend) 
         col.labels <- sapply(strsplit(col.labels, " "), function(x) paste(x, 
             collapse = "\n"))
+            
     if (!is.null(row.labels) && showlegend) 
         row.labels <- sapply(strsplit(row.labels, " "), function(x) paste(x, 
             collapse = "\n"))
+            
+    # set background color
     bg_rcol <- (col2rgb(col.bg)/255)[1]
     bg_gcol <- (col2rgb(col.bg)/255)[2]
     bg_bcol <- (col2rgb(col.bg)/255)[3]
+    
     write(paste("Background {\n\t skyColor [\n\t\t ", bg_rcol, 
         bg_gcol, bg_bcol, " \n\t]\n}", sep = " "), file = filename, 
         append = TRUE)
+        
+    
+    # calculate bar-length and -width (account for scaling and spacing)
     blength <- scalefac/(nrow(data) * (1 + space))
     bwidth <- scalefac/(ncol(data) * (1 + space))
+    
+    # draw the axes      
     if (showaxis) {
+        
         lab_rcol <- (col2rgb(col.lab)/255)[1]
         lab_gcol <- (col2rgb(col.lab)/255)[2]
         lab_bcol <- (col2rgb(col.lab)/255)[3]
+        
+        # x-axis label
         write(paste("RGBColor[", lab_rcol, ",", lab_gcol, ",", 
             lab_bcol, "], RGBColor[", lab_rcol, ",", lab_gcol, 
-            ",", lab_bcol, "], Text [ \"", lab.axis[2], "\", {", 
+            ",", lab_bcol, "], Text [ \"", lab.axis[1], "\", {", 
             scalefac + 0.5, ",0,0 }],\n", sep = ""), file = filename, 
             append = TRUE)
+            
+        # y-axis label
         write(paste("RGBColor[", lab_rcol, ",", lab_gcol, ",", 
-            lab_bcol, "], Text [ \"", lab.axis[3], "\", {0,", 
+            lab_bcol, "], Text [ \"", lab.axis[2], "\", {0,", 
             scalefac + 0.5, ",0 }],\n", sep = ""), file = filename, 
             append = TRUE)
+        
+        # z-axis label
         write(paste("RGBColor[", lab_rcol, ",", lab_gcol, ",", 
-            lab_bcol, "], Text [ \"", lab.axis[1], "\", {0, 0,", 
+            lab_bcol, "], Text [ \"", lab.axis[3], "\", {0, 0,", 
             scalefac + 0.5, " }],\n", sep = ""), file = filename, 
             append = TRUE)
+        
         ax_rcol <- (col2rgb(col.axis)/255)[1]
         ax_gcol <- (col2rgb(col.axis)/255)[2]
         ax_bcol <- (col2rgb(col.axis)/255)[3]
+        
+        # draw x-axis
         write(paste("Thickness[0.01], RGBColor[", ax_rcol, ",", 
             ax_gcol, ",", ax_bcol, "], Line[{{0,0,0},{", scalefac, 
             ",0,0}}],", sep = " "), file = filename, append = TRUE)
+        
+        # draw y-axis
         write(paste("Thickness[0.01], RGBColor[", ax_rcol, ",", 
             ax_gcol, ",", ax_bcol, "], Line[{{0,0,0},{0,", scalefac, 
             ",0}}],", sep = " "), file = filename, append = TRUE)
+            
+        # draw z-axis
         write(paste("Thickness[0.01], RGBColor[", ax_rcol, ",", 
             ax_gcol, ",", ax_bcol, "], Line[{{0,0,0},{0,0,", 
             scalefac, "}}],", sep = " "), file = filename, append = TRUE)
+            
     }
+    
+    # draw row-labels
     if (!is.null(row.labels) && showlegend) {
+        
         for (j in 1:length(row.labels)) {
             if (length(rcols) == length(row.labels)) {
                 rcol <- (col2rgb(rcols[j])/255)[1]
@@ -72,15 +106,21 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
                 gcol <- (col2rgb("black")/255)[2]
                 bcol <- (col2rgb("black")/255)[3]
             }
+            
             cur_xwidth <- j/nrow(data) * scalefac - blength/2
+            
             write(paste("RGBColor[", rcol, ",", gcol, ",", bcol, 
                 "], Text [ \"", row.labels[j], "\", {", cur_xwidth, 
                 ",", -0.4, ",", scalefac + 0.2, "}],\n", sep = ""), 
                 file = filename, append = TRUE)
         }
     }
+    
+    # draw column-labels
     if (!is.null(col.labels) && showlegend) {
+        
         for (j in 1:length(col.labels)) {
+            
             if (length(ccols) == length(col.labels)) {
                 rcol <- (col2rgb(ccols[j])/255)[1]
                 gcol <- (col2rgb(ccols[j])/255)[2]
@@ -96,19 +136,29 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
                 gcol <- (col2rgb("black")/255)[2]
                 bcol <- (col2rgb("black")/255)[3]
             }
+            
             cur_ywidth <- j/ncol(data) * scalefac - bwidth/2
+            
             write(paste("RGBColor[", rcol, ",", gcol, ",", bcol, 
                 "], Text [ \"", col.labels[j], "\", {", -0.4, 
                 ",", cur_ywidth, ",", scalefac + 0.2, "}],\n", 
                 sep = ""), file = filename, append = TRUE)
         }
     }
+    
+    
+    # main loop: iterate over data points
+    
     bwidth <- bwidth/2
     for (k in 1:ncol(data)) {
+        
         for (j in 1:nrow(data)) {
+            
             x <- j/nrow(data) * scalefac
             y <- k/ncol(data) * scalefac
             z <- data[j, k]
+            
+            # set current color
             if (!is.null(ccols)) {
                 rcol <- (col2rgb(ccols[k])/255)[1]
                 gcol <- (col2rgb(ccols[k])/255)[2]
@@ -127,17 +177,25 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
                 bcol <- (col2rgb(cols[(k - 1) * ncol(data) + 
                   j])/255)[3]
             }
+            
+            # draw data point
             write(paste("SurfaceColor[RGBColor[", rcol, ",", 
                 gcol, ",", bcol, "]],  Cuboid[{", x - bwidth, 
                 ",", y - bwidth, ",", 0, "},{", x + bwidth, ",", 
                 y + bwidth, ",", z, "}],", sep = ""), file = filename, 
                 append = TRUE)
+                
         }
     }
+    
+    
+    # configure general plot settings (font size, text style, etc.)
     write(paste("\n}, Boxed -> False, Axes -> False, AmbientLight->GrayLevel[", 
         ambientlight, "], TextStyle -> {FontFamily -> \"TimesRoman\", FontSlant ->\"Italic\", FontSize -> ", 
         14 * cex.lab, "}, Lighting -> True, BoxRatios -> Automatic, PlotRange -> All ]\n", 
         sep = ""), file = filename, append = TRUE)
+    
+    # create HTML output
     if (!is.null(htmlout)) {
         cat("<HTML>", file = htmlout, append = FALSE)
         cat("<HEAD><TITLE>VRMLGen-visualization</TITLE></HEAD><BODY>", 
@@ -156,7 +214,9 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
         cat("</APPLET>", file = htmlout, append = TRUE)
         cat("</HTML>", file = htmlout, append = TRUE)
     }
-    cat(paste("\nOutput file \"", filename, "\" was generated.\n", 
+    
+    # show success message
+    cat(paste("\nOutput file \"", filename, "\" was generated.\n\nPlease make sure that the output folder contains a copy of the \"live.jar\" file\navailable at: http://www.vis.uni-stuttgart.de/~kraus/LiveGraphics3D/download.html.\n\n", 
         sep = ""))
 }
 

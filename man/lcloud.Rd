@@ -12,11 +12,11 @@ folder as the generated output files.
 lcloud(data, labels = rownames(data), metalabels = NULL, 
 urllabels = NULL, filename = "out.m", pointstyle = c("s", "b",
 "t"), cols = rainbow(length(unique(labels))), scalefac = 4,
-lab.axis = c("X-axis", "Y-axis", "Z-axis"), col.axis = "black",
-showaxis = TRUE, col.lab = "black", col.metalab = "black",
-col.bg = "white", cex.lab = 1, ambientlight = 0.5,
-htmlout = NULL, hwidth = 1200, hheight = 800, mode2d = FALSE,
-showlegend = TRUE)
+autoscale = "independent", lab.axis = c("X-axis", "Y-axis",
+"Z-axis"), col.axis = "black", showaxis = TRUE,
+col.lab = "black", col.metalab = "black", col.bg = "white",
+cex.lab = 1, ambientlight = 0.5, htmlout = NULL, hwidth = 1200,
+hheight = 800, mode2d = FALSE, showlegend = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -42,6 +42,9 @@ showlegend = TRUE)
   >= length(unique(labels)) }
   \item{scalefac}{ a scaling factor for the size of the 3D box in
    which the data will be visualized }
+  \item{autoscale}{ the scaling type. "independent" means all axes
+   are auto-scaled independently, "equidist" means all axes are
+   scaled by the same factor, "none" means no scaling is applied }   
   \item{lab.axis}{ a vector of size 3 containing the axis labels }
   \item{col.axis}{ color of the axis }
   \item{showaxis}{ if FALSE, the coordinate axes are hidden in

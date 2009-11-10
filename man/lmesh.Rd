@@ -9,8 +9,9 @@ lmesh visualizes parametric functions in the LiveGraphics3D-format.
 lmesh(xfun = "sin(v)*cos(u)", yfun = "sin(v)*sin(u)",
 zfun = "cos(v)", param1 = "u", param2 = "v",
 range1 = c(0,2*pi), range2 = c(0,pi), size1 = 30,
-size2 = 30, filename = "out.m", cols = NULL,
-scalefac = 4, lab.axis = c("X-axis", "Y-axis", "Z-axis"),
+size2 = 30, filename = "out.m", cols = "red",
+scalefac = 4, autoscale = "independent",
+lab.axis = c("X-axis", "Y-axis", "Z-axis"),
 col.axis = "black", showaxis = TRUE, col.lab = "black",
 col.bg = "white", cex.lab = 1, ambientlight = 0.5,
 htmlout = NULL, hwidth = 1200, hheight = 800)
@@ -43,6 +44,11 @@ htmlout = NULL, hwidth = 1200, hheight = 800)
   >= length(unique(labels)) }
   \item{scalefac}{ a scaling factor for the size of the 3D box in
    which the data will be visualized }
+  \item{autoscale}{ the scaling type. "independent" means all axes
+   are auto-scaled independently, "equidist" means all axes are
+   scaled by the same factor, "equicenter" additionally positions
+   the drawn object in the center, "none" means no scaling is
+   applied}   
   \item{lab.axis}{ a vector of size 3 containing the axis labels }
   \item{col.axis}{ color of the axis }
   \item{showaxis}{ if FALSE, the coordinate axes are hidden in

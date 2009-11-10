@@ -16,7 +16,7 @@ ccols = NULL, scalefac = 4, lab.axis = c("X-axis",
 showaxis = TRUE, col.lab = "white", col.bg = "black",
 cex.lab = 1, cex.rowlab= 1, cex.collab = 1,
 navigation = "EXAMINE", fov = 0.785, 
-pos = rep(scalefac + 4, 3), dir = c(-0.59, 0.77, 0.24, 0.99),
+pos = rep(scalefac + 4, 3), dir = c(0.19, 0.45, 0.87, 2.45),
 htmlout = NULL, hwidth = 1200, hheight = 800,
 showlegend = TRUE)
 }
