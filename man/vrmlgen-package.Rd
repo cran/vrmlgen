@@ -13,8 +13,8 @@ Apart from providing access to low-level plotting functions (points, lines, text
 \tabular{ll}{
 Package: \tab vrmlgen\cr
 Type: \tab Package\cr
-Version: \tab 1.4.1\cr
-Date: \tab Date: 2010-3-8\cr
+Version: \tab 1.4.2\cr
+Date: \tab Date: 2010-5-4\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 URL: \tab http://www.cs.nott.ac.uk/~egg/vrmlgen\cr
