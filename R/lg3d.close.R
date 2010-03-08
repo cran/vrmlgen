@@ -41,7 +41,10 @@ function ()
     file.remove(filename)
     
     datadir <- system.file("data", package = "vrmlgen")
-    file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar"))
+    if (data.class(result<-try(file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar")), TRUE))=="try-error")
+    {
+      warning("\nCannot copy file live.jar from vrlmgen-folder to current directory. You might need to copy the file manually.")
+    }
     
     setwd(curdir)
     if (!is.null(htmlout)) {

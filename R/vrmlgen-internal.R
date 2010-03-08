@@ -169,6 +169,31 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
         }
     }
     
+    
+    rcol <- NULL
+    gcol <- NULL
+    bcol <- NULL
+    
+    # set RGB-colors
+    if (length(cols) >= (ncol(data) * nrow(data))) {
+        rcol <- sapply(cols, function(x) (col2rgb(x)/255)[1])
+        gcol <- sapply(cols, function(x) (col2rgb(x)/255)[2])
+        bcol <- sapply(cols, function(x) (col2rgb(x)/255)[3])
+    }
+    else {    		
+        if (length(cols) >= 1) {
+            rcol <- (col2rgb(cols[1])/255)[1]
+            gcol <- (col2rgb(cols[1])/255)[2]
+            bcol <- (col2rgb(cols[1])/255)[3]
+        }
+        else {
+            rcol <- (col2rgb("lightblue")/255)[1]
+            gcol <- (col2rgb("lightblue")/255)[2]
+            bcol <- (col2rgb("lightblue")/255)[3]
+        }
+    }
+    
+    
     # main loop: iterate over data points
     
     bwidth <- bwidth/2
@@ -197,12 +222,15 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
                 bcol <- (col2rgb(rcols[j])/255)[3]
             }
             else {
-                rcol <- (col2rgb(cols[(k - 1) * ncol(data) + 
-                  j])/255)[1]
-                gcol <- (col2rgb(cols[(k - 1) * ncol(data) + 
-                  j])/255)[2]
-                bcol <- (col2rgb(cols[(k - 1) * ncol(data) + 
-                  j])/255)[3]
+                if(length(rcol) > 1)
+                {
+	                rcol <- rcol[(k - 1) * ncol(data) + 
+	                  j]
+	                gcol <- gcol[(k - 1) * ncol(data) + 
+	                  j]
+	                bcol <- bcol[(k - 1) * ncol(data) + 
+	                  j]
+	              }
             }
             
             # draw data point
@@ -246,8 +274,15 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
             cat("</HTML>", file = htmlout, append = TRUE)
         }
         
-        # copy the Livegraphics3D live.jar to the output directory
-        file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar"))
+        # copy the Livegraphics3D live.jar to the output directory                
+        datadir <- system.file("data", package = "vrmlgen")       	
+       	curdir <- getwd()
+       	
+       	# use if file.exists
+        if (data.class(result<-try(file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar")), TRUE))=="try-error")
+        {
+          warning("\nCannot copy file live.jar from vrlmgen-folder to current directory. You might need to copy the file manually.")
+        }
         
         # show success message
         cat(paste("\nOutput file \"", filename, "\" was generated in folder ", 
@@ -471,7 +506,13 @@ function (x, y = NULL, z = NULL, labels = rownames(data), metalabels = NULL,
         }
         
         # copy the Livegraphics3D live.jar to the output directory
-        file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar"))
+				datadir <- system.file("data", package = "vrmlgen")       	
+       	curdir <- getwd()
+       	
+        if (data.class(result<-try(file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar")), TRUE))=="try-error")
+        {
+          warning("\nCannot copy file live.jar from vrlmgen-folder to current directory. You might need to copy the file manually.")
+        }
         
         cat(paste("\nOutput file \"", filename, "\" was generated in folder ", 
             getwd(), ".\n", sep = ""))
@@ -789,9 +830,16 @@ function (xfun = "sin(v)*cos(u)", yfun = "sin(v)*sin(u)", zfun = "cos(v)",
             cat("</APPLET>", file = htmlout, append = TRUE)
             cat("</HTML>", file = htmlout, append = TRUE)
         }
-       
+
+				
        	# copy the Livegraphics3D live.jar to the output directory
-        file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar"))
+       	datadir <- system.file("data", package = "vrmlgen")       	
+       	curdir <- getwd()
+       	
+        if (data.class(result<-try(file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar")), TRUE))=="try-error")
+        {
+          warning("\nCannot copy file live.jar from vrlmgen-folder to current directory. You might need to copy the file manually.")
+        }
         
         # show success message        
         cat(paste("\nOutput file \"", filename, "\" was generated in folder ", 
@@ -1010,11 +1058,11 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
     
     # set RGB-colors
     if (length(cols) >= (ncol(data) * nrow(data))) {
-        rcols <- sapply(cols, function(x) (col2rgb(x)/255)[1])
-        gcols <- sapply(cols, function(x) (col2rgb(x)/255)[2])
-        bcols <- sapply(cols, function(x) (col2rgb(x)/255)[3])
+        rcol <- sapply(cols, function(x) (col2rgb(x)/255)[1])
+        gcol <- sapply(cols, function(x) (col2rgb(x)/255)[2])
+        bcol <- sapply(cols, function(x) (col2rgb(x)/255)[3])
     }
-    else {
+    else {    		
         if (length(cols) >= 1) {
             rcol <- (col2rgb(cols[1])/255)[1]
             gcol <- (col2rgb(cols[1])/255)[2]
@@ -1054,12 +1102,15 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
                 bcol <- (col2rgb(rcols[j])/255)[3]
             }
             else {
-                rcol <- (col2rgb(cols[(k - 1) * ncol(data) + 
-                  j])/255)[1]
-                gcol <- (col2rgb(cols[(k - 1) * ncol(data) + 
-                  j])/255)[2]
-                bcol <- (col2rgb(cols[(k - 1) * ncol(data) + 
-                  j])/255)[3]
+                if(length(rcol) > 1)
+                {
+	                rcol <- rcol[(k - 1) * ncol(data) + 
+	                  j]
+	                gcol <- gcol[(k - 1) * ncol(data) + 
+	                  j]
+	                bcol <- bcol[(k - 1) * ncol(data) + 
+	                  j]
+	              }
             }
             
             
@@ -1488,6 +1539,8 @@ function (x, h = .hnorm(x, weights), eval.points = NULL, weights = rep(1,
     if (require(misc3d)) {
         struct <- contour3d(est, levels, eval.points[, 1], eval.points[, 
             2], eval.points[, 3], engine = "none")
+    } else {
+      stop("In order to draw contour surfaces, please first install the misc3d package!")
     }
     
     # write output to VRML file

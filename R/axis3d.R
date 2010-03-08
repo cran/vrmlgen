@@ -32,25 +32,27 @@ function (lab.axis = c("X-axis", "Y-axis", "Z-axis"), filename = NULL,
     
     		# write axis labels
         write(paste("Transform {\n\ttranslation ", global_scale * 
-            local_scale + 0.5 + nchar(as.character(lab.axis[1])) * 
-            0.12 * cex.lab, " 0 0\n\tscale ", cex.lab * 0.28, 
+            local_scale + 0.8, " 0 0\n\tscale ", cex.lab * 0.28, 
             cex.lab * 0.28, cex.lab * 0.28, "\n\trotation 0.00000 0.70711 0.70711 3.14159\n\tchildren Shape {\n\t\tappearance Appearance { material Material {diffuseColor ", 
             lab_rcol, lab_gcol, lab_bcol, "  } }\n\tgeometry Text { string \"", 
-            lab.axis[1], "\" }\n\t}\n}", sep = " "), file = filename, 
+            lab.axis[1], "\"\nfontStyle FontStyle {\nfamily [\"SANS\"]\njustify \"MIDDLE\"\n }\n }\n\t}\n}",
+            sep = " "), file = filename, 
             append = TRUE)
             
         write(paste("Transform {\n\ttranslation 0 ", global_scale * 
-            local_scale + 0.5, " 0\n\tscale ", cex.lab * 0.28, 
+            local_scale + 0.8, " 0\n\tscale ", cex.lab * 0.28, 
             cex.lab * 0.28, cex.lab * 0.28, "\n\trotation 0.57735 0.57735 0.57735 2.09440\n\tchildren Shape {\n\t\tappearance Appearance { material Material {diffuseColor ", 
             lab_rcol, lab_gcol, lab_bcol, "  } }\n\tgeometry Text { string \"", 
-            lab.axis[2], "\" }\n\t}\n}", sep = " "), file = filename, 
+            lab.axis[2], "\"\nfontStyle FontStyle {\nfamily [\"SANS\"]\njustify \"MIDDLE\"\n }\n }\n\t}\n}",
+            sep = " "), file = filename, 
             append = TRUE)
             
         write(paste("Transform {\n\ttranslation 0 0 ", global_scale * 
-            local_scale + 0.5, "\n\tscale ", cex.lab * 0.28, 
+            local_scale + 0.8, "\n\tscale ", cex.lab * 0.28, 
             cex.lab * 0.28, cex.lab * 0.28, "\n\trotation 0.28108 0.67860 0.67860 2.59356\n\tchildren Shape {\n\t\tappearance Appearance { material Material {diffuseColor ", 
             lab_rcol, lab_gcol, lab_bcol, "  } }\n\tgeometry Text { string \"", 
-            lab.axis[3], "\" }\n\t}\n}", sep = " "), file = filename, 
+            lab.axis[3], "\"\nfontStyle FontStyle {\nfamily [\"SANS\"]\njustify \"MIDDLE\"\n }\n }\n\t}\n}",
+            sep = " "), file = filename, 
             append = TRUE)
         
         # write axes   
