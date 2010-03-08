@@ -8,18 +8,12 @@
 \usage{data(c60coords)}
 %The format is:
 % num [1:60, 1:3] -1 -1 1 1 0 ...
-\format{
-}
 \details{
   This dataset contains the 3D-coordinates of a C60 molecule (known as fullerene)
   used as example input to demonstrate VRMLGen's visualization features.
 }
-\source{
-}
 \references{
   The molecular structure was created with the open-source molecular modeling 
   sofware BALL, see www.ballview.org.
-}
-\examples{
 }
 \keyword{datasets}

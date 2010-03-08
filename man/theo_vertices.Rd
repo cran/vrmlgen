@@ -8,8 +8,6 @@
 % The format is:
 % num [1:8966, 1:3] 0.904 0.895 0.882 0.865 0.847 ...
 \usage{data(theo_vertices)}
-\format{  
-}
 \details{
   This dataset contains the 3D-vertices of a molecular structure used 
   as example input for the mesh3d-function. The molecular structure
@@ -18,9 +16,5 @@
 \source{  
   The molecular structure was created with the open-source molecular modeling 
   sofware BALL, see www.ballview.org.  
-}
-\references{
-}
-\examples{
 }
 \keyword{datasets}

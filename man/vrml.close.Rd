@@ -19,18 +19,18 @@ vrml.close()
   The function is used for its side-effect (output of a VRML-file 
   in the specified directory) and has no return value.
 }
-\references{ }
 \author{ Enrico Glaab }
-\note{
-}
 \seealso{ \link{vrml.open} }
 \examples{
+
+curdir <- getwd()
+outdir <- tempdir()
+setwd(outdir)
 
 # This example loads the atom coordinates of a molecule
 # (C60, fullerene) and visualizes the molecule in 3D
 # using points for the atoms and lines for the atom bonds
 # (atom pairs within a given distance threshold).
-
 
 vrml.open(file="c60.wrl", navigation="EXAMINE",
           html.embed="c60example.html")
@@ -56,9 +56,14 @@ vrml.close()
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
-browseURL(paste("file://",file.path(getwd(),
-                "c60example.html"), sep=""))
+if(file.exists(paste("file://",file.path(outdir,
+                "c60example.html"), sep="")))
+{
+  browseURL(paste("file://",file.path(outdir,
+                  "c60example.html"), sep=""))
+}
 
+setwd(curdir)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

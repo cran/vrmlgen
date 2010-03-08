@@ -31,11 +31,7 @@ rot.comb(rotvec1 = c(1, 0, 0, pi/2), rotvec2 = c(0, 0, 1, pi))
   Returns a numeric vector of length 4, where the first 3 components
   represent a rotation axis and the last component is rotation angle in radians.
 }
-\references{ }
 \author{ Enrico Glaab }
-\note{
-}
-\seealso{}
 \examples{
 
 # compute the combined rotation vector for

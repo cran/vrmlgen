@@ -13,7 +13,7 @@ Apart from providing access to low-level plotting functions (points, lines, text
 \tabular{ll}{
 Package: \tab vrmlgen\cr
 Type: \tab Package\cr
-Version: \tab 1.4.2\cr
+Version: \tab 1.4.3\cr
 Date: \tab Date: 2010-5-4\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
@@ -25,12 +25,14 @@ Enrico Glaab
 
 e.glaab@cs.nott.ac.uk
 }
-\references{
-}
+
 \keyword{ package }
-\seealso{
-}
 \examples{
+
+curdir <- getwd()
+outdir <- tempdir()
+setwd(outdir)
+
 # create 33x3 matrix with random 3D input data
 mat <- matrix(runif(99, 0, 3), ncol=3)
 
@@ -41,4 +43,7 @@ y <- ifelse(y == 0, "class 1", ifelse(y == 1, "class 2", "class 3"))
 # create ouput using numbers from 1 to length(y) as metalabels
 cloud3d(mat, labels=y, metalabels=1:length(y), col.axis="black", col.lab="blue",
 col.bg="white")
+
+setwd(curdir)
+
 }

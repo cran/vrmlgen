@@ -117,11 +117,13 @@ Bowman, A. W. and Azzalini, A. (2007). R package 'sm': \emph{Nonparametric smoot
 Feng, D. and Tierney, L. (2009). R package 'misc3d": \emph{Miscellaneous 3D plots} (version 0.6-1) URL: \url{http://cran.r-project.org/web/packages/misc3d/index.htm}
 }
 \author{Enrico Glaab}
-\note{
-}
 \seealso{ \link{mesh3d}, \link{bar3d}}
 \examples{
 
+
+curdir <- getwd()
+outdir <- tempdir()
+setwd(outdir)
 
 
 # example 1: visualize random 3D input data
@@ -138,8 +140,12 @@ cloud3d(mat, labels=y, metalabels=1:length(y), col.axis="black",
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
-browseURL(paste("file://",file.path(getwd(),
-                "result.html"), sep=""))
+if(file.exists(paste("file://",file.path(outdir,
+                "result.html"), sep="")))
+{
+  browseURL(paste("file://",file.path(outdir,
+                  "result.html"), sep=""))
+}
 
 
 # example 2: visualization of Edgar Anderson's Iris data
@@ -151,9 +157,14 @@ cloud3d(irismat, labels=iris[,5], vrml_showdensity=TRUE,
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
-browseURL(paste("file://",file.path(getwd(),
-                "iris.html"), sep=""))
+if(file.exists(paste("file://",file.path(outdir,
+                "iris.html"), sep="")))
+{
+  browseURL(paste("file://",file.path(outdir,
+                  "iris.html"), sep=""))
+}
  
+setwd(curdir)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

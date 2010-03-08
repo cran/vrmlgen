@@ -45,12 +45,15 @@ lg3d.open(filename = "out.m", col = "white", scale = 1,
    the specified directory) and has no return value. The htmlout-parameter can 
    be used to embed the resulting Livegraphics3D-object in a template HTML-file.  
 }
-\references{ }
 \author{ Enrico Glaab }
-\note{
-}
 \seealso{ \link{vrml.close} }
 \examples{
+
+
+curdir <- getwd()
+outdir <- tempdir()
+setwd(outdir)
+
 
 # This example loads the atom coordinates of a molecule
 # (C60, fullerene) and visualizes the molecule in 3D
@@ -81,8 +84,14 @@ lg3d.close()
 
 # show the output in a web-browser 
 # (Java must be enabled!)
-browseURL(paste("file://",file.path(getwd(),
-                "c60example.html"), sep=""))
+if(file.exists(paste("file://",file.path(outdir,
+                "c60example.html"), sep="")))
+{
+  browseURL(paste("file://",file.path(outdir,
+                  "c60example.html"), sep=""))
+}
+
+setwd(curdir)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

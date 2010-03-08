@@ -43,13 +43,14 @@ axis3d(lab.axis = c("X-axis", "Y-axis", "Z-axis"),
   The function is used for its side-effect (writing coordinate axes to a VRML-
   or Livegraphics3D-file) and has no return value.
 }
-\references{}
 \author{ Enrico Glaab }
-\note{
-}
 \seealso{ \link{text3d}, \link{lines3d}}
 \examples{
 
+
+curdir <- getwd()
+outdir <- tempdir()
+setwd(outdir)
 
 # start a new VRML environment
 vrml.open(file="axis_example.wrl", scale=5,
@@ -69,9 +70,14 @@ vrml.close()
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
-browseURL(paste("file://",file.path(getwd(),
-                "axis.html"), sep=""))
+if(file.exists(paste("file://",file.path(outdir,
+                "axis.html"), sep="")))
+{
+  browseURL(paste("file://",file.path(outdir,
+                  "axis.html"), sep=""))
+}
 
+setwd(curdir)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

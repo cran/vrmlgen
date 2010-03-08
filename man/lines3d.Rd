@@ -32,12 +32,13 @@ lines3d(x, y = NULL, z = NULL, col = "black", lwd = 1)
   The function is used for its side-effect (writing lines to a VRML-
   or Livegraphics3D-file) and has no return value.
 }
-\references{}
 \author{ Enrico Glaab }
-\note{
-}
 \seealso{ \link{text3d}, \link{points3d}}
 \examples{
+
+curdir <- getwd()
+outdir <- tempdir()
+setwd(outdir)
 
 # This example loads the atom coordinates of a molecule
 # (C60, fullerene) and visualizes the molecule in 3D
@@ -69,8 +70,15 @@ vrml.close()
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
-browseURL(paste("file://",file.path(getwd(),
-                "c60example.html"), sep=""))
+if(file.exists(paste("file://",file.path(outdir,
+                "c60example.html"), sep="")))
+{
+  browseURL(paste("file://",file.path(outdir,
+                  "c60example.html"), sep=""))
+}                
+                
+setwd(curdir)
+                
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

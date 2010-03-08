@@ -122,12 +122,13 @@ mesh3d(xfun = "sin(v)*cos(u)", yfun = "sin(v)*sin(u)",
   The function is used for its side-effect (creating a VRML-,
   Livegraphics3D-, or obj-file) and has no return value.
 }
-\references{}
 \author{Enrico Glaab}
-\note{
-}
 \seealso{ \link{cloud3d}, \link{bar3d}}
 \examples{
+
+curdir <- getwd()
+outdir <- tempdir()
+setwd(outdir)
 
 # Visualization of a parametric function
 # defining the surface of 3D spiral
@@ -142,9 +143,14 @@ mesh3d(xfun="s*cos(s)*(4 + cos(t+s))",
        
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
-browseURL(paste("file://",file.path(getwd(),
-                "spiral.html"), sep=""))
+if(file.exists(paste("file://",file.path(outdir,
+                "spiral.html"), sep="")))
+{                
+  browseURL(paste("file://",file.path(outdir,
+                  "spiral.html"), sep=""))
+}
 
+setwd(curdir)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -11,8 +11,6 @@
 % - attr(*, "dimnames")=List of 2
 %  ..$ : chr [1:76] "V2" "V3" "V4" "V5" ...
 %  ..$ : NULL
-\format{
-}
 \details{
   This dataset was obtained by applying an Independent Component Analysis
   to a public breast cancer microarray data set. The resulting three
@@ -23,9 +21,5 @@
   The original data set is publicly available at
   \url{http://www.ebi.ac.uk/microarray-as/ae}
   under the accession number: E-TABM-576
-}
-\references{  
-}
-\examples{
 }
 \keyword{datasets}

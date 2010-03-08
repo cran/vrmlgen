@@ -49,12 +49,13 @@ vrml.open(filename = "out.wrl", col = "white", navigation = NULL,
   htmlout-parameter can be used to embed the resulting VRML-object
   in a template HTML-file.
 }
-\references{ }
 \author{ Enrico Glaab }
-\note{
-}
 \seealso{ \link{vrml.close} }
 \examples{
+
+curdir <- getwd()
+outdir <- tempdir()
+setwd(outdir)
 
 # This example loads the atom coordinates of a molecule
 # (C60, fullerene) and visualizes the molecule in 3D
@@ -85,8 +86,14 @@ vrml.close()
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
-browseURL(paste("file://",file.path(getwd(),
-                "c60example.html"), sep=""))
+if(file.exists(paste("file://",file.path(outdir,
+                "c60example.html"), sep="")))
+{                
+  browseURL(paste("file://",file.path(outdir,
+                  "c60example.html"), sep=""))
+}
+
+setwd(curdir)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

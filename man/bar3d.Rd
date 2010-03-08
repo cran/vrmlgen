@@ -115,12 +115,13 @@ bar3d(data, row.labels = rownames(data),
   The function is used for its side-effect (creating a VRML-
   or Livegraphics3D-file) and has no return value.
 }
-\references{ }
 \author{Enrico Glaab}
-\note{
-}
 \seealso{ \link{mesh3d}, \link{cloud3d}}
 \examples{
+
+curdir <- getwd()
+outdir <- tempdir()
+setwd(outdir)
 
 # Height map visualization of geographical data
 # with colors corresponding to different height levels
@@ -132,9 +133,12 @@ bar3d(volcano, col.bg="white", cols=cols,
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
-browseURL(paste("file://",file.path(getwd(),
-                "volcano.html"), sep=""))
-      
+if(file.exists(paste("file://",file.path(outdir,
+                "volcano.html"), sep="")))
+{
+  browseURL(paste("file://",file.path(outdir,
+                  "volcano.html"), sep=""))
+}     
 
 # bar plot for a data matrix with numerical metalabels
 mat <- matrix(9:1, nrow=3)
@@ -146,9 +150,12 @@ bar3d(mat, space=1, metalabels=1:9, col.bg="white",
       
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
-browseURL(paste("file://",file.path(getwd(),
-                "barplot.html"), sep=""))
-
+if(file.exists(paste("file://",file.path(outdir,
+                "barplot.html"), sep="")))
+{
+  browseURL(paste("file://",file.path(outdir,
+                  "barplot.html"), sep=""))
+}
 
 # Height map visualization of very rough and highly
 # simplified topographic data for the United Kingdom
@@ -158,8 +165,9 @@ data(uk_topo)
 bar3d(uk_topo, autoscale=FALSE, cols="blue",
      space=0, showaxis=FALSE, filename = "uk_topo.wrl",
      htmlout="uk_topo.html")
-      
- 
+
+setwd(curdir)      
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
