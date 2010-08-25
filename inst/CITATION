@@ -1,0 +1,21 @@
+citHeader("To cite vrmlgen in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{vrmlgen}: An {R} Package for 3D Data Visualization on the Web",
+  author       = personList(as.person("Enrico Glaab"),
+                   as.person("Jonathan M. Garibaldi"),
+                   as.person("Natalio Krasnogor")),
+  journal      = "Journal of Statistical Software",
+  year         = "2010",
+  volume       = "36",
+  number       = "8",
+  pages        = "1--18",
+  url          = "http://www.jstatsoft.org/v36/i08/",
+
+  textVersion  =
+  paste("Enrico Glaab, Jonathan M. Garibaldi, Natalio Krasnogor (2010).",
+        "vrmlgen: An R Package for 3D Data Visualization on the Web.",
+        "Journal of Statistical Software, 36(8), 1-18.",
+        "URL http://www.jstatsoft.org/v36/i08/.")
+)
+

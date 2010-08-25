@@ -45,7 +45,7 @@ bar3d(data, row.labels = rownames(data),
    one or at least as large as the number of different labels
    (i.e. length(col) >= length(unique(labels))}
   \item{rcols}{specifies the bar colors per row of the
-   input matrix (the cols- and ccols-parameter can remain
+   input matrix (the cols- and ccols paramter can remain
    undefined). The number of colors must correspond to the
    numbers of rows of the data matrix.}
   \item{ccols}{specifies the bar colors per column of the
@@ -105,7 +105,7 @@ bar3d(data, row.labels = rownames(data),
   
   To add additional shapes and objects to the final 3D scene, this plotting 
   function can also be called within a VRML- or Livegraphics3D-environment 
-  created by calling the vrml.open()- or lg3d.open()-function. In this case, 
+  created by calling the vrml.open() or lg3d.open() function. In this case, 
   cloud3d will inherit all global parameters set in the vrml.open- or lg3d.open-
   function (e.g. filename, type, htmlout, etc.) and the user does not need to 
   specify these options anymore.
@@ -116,6 +116,13 @@ bar3d(data, row.labels = rownames(data),
   or Livegraphics3D-file) and has no return value.
 }
 \author{Enrico Glaab}
+\references{
+	
+	Enrico Glaab, Jonathan M. Garibaldi, Natalio Krasnogor (2010).  vrmlgen: An R Package for
+	3D Data Visualization on the Web. \emph{Journal of Statistical Software, 36(8)}, p. 1-18.
+	URL: \url{http://www.jstatsoft.org/v36/i08/}
+	
+}
 \seealso{ \link{mesh3d}, \link{cloud3d}}
 \examples{
 
@@ -127,34 +134,34 @@ setwd(outdir)
 # with colors corresponding to different height levels
 colpalette <- terrain.colors(max(volcano)-min(volcano)+1)
 cols <- colpalette[as.vector(t(volcano))-min(volcano)+1]
-bar3d(volcano, col.bg="white", cols=cols,
-      type="vrml", space=0, showaxis=FALSE,
-      filename="volcano.wrl", htmlout="volcano.html")
+bar3d(volcano, col.bg = "white", cols = cols,
+      type = "vrml", space = 0, showaxis = FALSE,
+      filename = "volcano.wrl", htmlout = "volcano.html")
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
 if(file.exists(paste("file://",file.path(outdir,
-                "volcano.html"), sep="")))
+                "volcano.html"), sep = "")))
 {
   browseURL(paste("file://",file.path(outdir,
-                  "volcano.html"), sep=""))
+                  "volcano.html"), sep = ""))
 }     
 
 # bar plot for a data matrix with numerical metalabels
-mat <- matrix(9:1, nrow=3)
+mat <- matrix(9:1, nrow = 3)
 rownames(mat) <- paste('row',1:3)
 colnames(mat) <- paste('col',1:3)
-bar3d(mat, space=1, metalabels=1:9, col.bg="white",
-      col.axis="blue", col.lab="black", type="vrml",
-      filename="barplot.wrl", htmlout="barplot.html")
+bar3d(mat, space = 1, metalabels = 1:9, col.bg = "white",
+      col.axis = "blue", col.lab = "black", type = "vrml",
+      filename = "barplot.wrl", htmlout = "barplot.html")
       
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
 if(file.exists(paste("file://",file.path(outdir,
-                "barplot.html"), sep="")))
+                "barplot.html"), sep = "")))
 {
   browseURL(paste("file://",file.path(outdir,
-                  "barplot.html"), sep=""))
+                  "barplot.html"), sep = ""))
 }
 
 # Height map visualization of very rough and highly
@@ -162,9 +169,9 @@ if(file.exists(paste("file://",file.path(outdir,
 
 data(uk_topo)
 
-bar3d(uk_topo, autoscale=FALSE, cols="blue",
-     space=0, showaxis=FALSE, filename = "uk_topo.wrl",
-     htmlout="uk_topo.html")
+bar3d(uk_topo, autoscale = FALSE, cols = "blue",
+     space = 0, showaxis = FALSE, filename = "uk_topo.wrl",
+     htmlout = "uk_topo.html")
 
 setwd(curdir)      
 

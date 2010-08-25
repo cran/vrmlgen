@@ -112,7 +112,7 @@ mesh3d(xfun = "sin(v)*cos(u)", yfun = "sin(v)*sin(u)",
   
   To add additional shapes and objects to the final 3D scene, this plotting 
   function can also be called within a VRML- or Livegraphics3D-environment 
-  created by calling the vrml.open()- or lg3d.open()-function. In this case, 
+  created by calling the vrml.open() or lg3d.open() function. In this case, 
   mesh3d will inherit all global parameters set in the vrml.open- or lg3d.open-
   function (e.g. filename, type, htmlout, etc.) and the user does not need to 
   specify these options anymore.
@@ -123,6 +123,13 @@ mesh3d(xfun = "sin(v)*cos(u)", yfun = "sin(v)*sin(u)",
   Livegraphics3D-, or obj-file) and has no return value.
 }
 \author{Enrico Glaab}
+\references{
+	
+	Enrico Glaab, Jonathan M. Garibaldi, Natalio Krasnogor (2010).  vrmlgen: An R Package for
+	3D Data Visualization on the Web. \emph{Journal of Statistical Software, 36(8)}, p. 1-18.
+	URL: \url{http://www.jstatsoft.org/v36/i08/}
+	
+}
 \seealso{ \link{cloud3d}, \link{bar3d}}
 \examples{
 
@@ -133,21 +140,21 @@ setwd(outdir)
 # Visualization of a parametric function
 # defining the surface of 3D spiral
 
-mesh3d(xfun="s*cos(s)*(4 + cos(t+s))",
-       yfun="s*sin(s)*(4 + cos(t+s))",
-       zfun="s*sin(t+s)",param1="s",
-       param2="t",range1=c(0,4*pi),
-       range2=c(0,2*pi), type="vrml",
-       filename="spiral.wrl",
-       htmlout="spiral.html")
+mesh3d(xfun = "s * cos(s) * (4 + cos(t + s))",
+       yfun = "s * sin(s) * (4 + cos(t + s))",
+       zfun = "s * sin(t + s)", param1 = "s",
+       param2 = "t",range1 = c(0, 4 * pi),
+       range2 = c(0, 2 * pi), type = "vrml",
+       filename = "spiral.wrl",
+       htmlout = "spiral.html")
        
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
 if(file.exists(paste("file://",file.path(outdir,
-                "spiral.html"), sep="")))
+                "spiral.html"), sep = "")))
 {                
   browseURL(paste("file://",file.path(outdir,
-                  "spiral.html"), sep=""))
+                  "spiral.html"), sep = ""))
 }
 
 setwd(curdir)

@@ -101,7 +101,7 @@ cloud3d(x, y = NULL, z = NULL, labels = rownames(data),
   
   To add additional shapes and objects to the final 3D scene, this plotting 
   function can also be called within a VRML- or Livegraphics3D-environment 
-  created by calling the vrml.open()- or lg3d.open()-function. In this case, 
+  created by calling the vrml.open() or lg3d.open() function. In this case, 
   cloud3d will inherit all global parameters set in the vrml.open- or lg3d.open-
   function (e.g. filename, type, htmlout, etc.) and the user does not need to 
   specify these options anymore.
@@ -115,7 +115,11 @@ cloud3d(x, y = NULL, z = NULL, labels = rownames(data),
 Bowman, A. W. and Azzalini, A. (2007). R package 'sm': \emph{Nonparametric smoothing methods} (version 2.2) URL: \url{http://www.stats.gla.ac.uk/~adrian/sm}, \url{http://azzalini.stat.unipd.it/Book_sm}
 
 Feng, D. and Tierney, L. (2009). R package 'misc3d": \emph{Miscellaneous 3D plots} (version 0.6-1) URL: \url{http://cran.r-project.org/web/packages/misc3d/index.htm}
+	
+Enrico Glaab, Jonathan M. Garibaldi, Natalio Krasnogor (2010).  vrmlgen: An R Package for 3D Data Visualization on the Web. \emph{Journal of Statistical Software, 36(8)}, p. 1-18. URL: \url{http://www.jstatsoft.org/v36/i08/}
+	
 }
+
 \author{Enrico Glaab}
 \seealso{ \link{mesh3d}, \link{bar3d}}
 \examples{
@@ -127,41 +131,41 @@ setwd(outdir)
 
 
 # example 1: visualize random 3D input data
-mat <- matrix(runif(99, 0, 3), ncol=3)
+mat <- matrix(runif(99, 0, 3), ncol = 3)
 
 # create random class assignment vector with three classes
 y <- round(runif(33, 0, 2))
 y <- ifelse(y == 0, "class 1", ifelse(y == 1, "class 2", "class 3"))
 
 # create ouput using numbers from 1 to length(y) as metalabels
-cloud3d(mat, labels=y, metalabels=1:length(y), col.axis="black",
-        col.lab="blue", col.bg="white", type="vrml",
-        filename="result.wrl", htmlout="result.html")
+cloud3d(mat, labels = y, metalabels = 1:length(y), col.axis = "black",
+        col.lab = "blue", col.bg = "white", type = "vrml",
+        filename = "result.wrl", htmlout = "result.html")
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
 if(file.exists(paste("file://",file.path(outdir,
-                "result.html"), sep="")))
+                "result.html"), sep = "")))
 {
   browseURL(paste("file://",file.path(outdir,
-                  "result.html"), sep=""))
+                  "result.html"), sep = ""))
 }
 
 
 # example 2: visualization of Edgar Anderson's Iris data
 # using density estimation contour surfaces (requires misc3-package!)
 irismat <- iris[,1:3]
-cloud3d(irismat, labels=iris[,5], vrml_showdensity=TRUE,
-        col.axis="blue", col.lab="black", lab.axis=colnames(irismat),
-        type="vrml", filename="result2.wrl", htmlout="iris.html")
+cloud3d(irismat, labels = iris[,5], vrml_showdensity = TRUE,
+        col.axis = "blue", col.lab = "black", lab.axis = colnames(irismat),
+        type = "vrml", filename = "result2.wrl", htmlout = "iris.html")
 
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
 if(file.exists(paste("file://",file.path(outdir,
-                "iris.html"), sep="")))
+                "iris.html"), sep = "")))
 {
   browseURL(paste("file://",file.path(outdir,
-                  "iris.html"), sep=""))
+                  "iris.html"), sep = ""))
 }
  
 setwd(curdir)

@@ -35,8 +35,8 @@ axis3d(lab.axis = c("X-axis", "Y-axis", "Z-axis"),
 	plot, bar plot or 3D mesh visualization, which already contains coordinate 
 	axes, the higher-level plotting functions cloud3d, bar3d and mesh3d provide 
 	more convenient alternatives. axis3d can only be applied within a VRML- or 
-	Livegraphics3D-environment created by calling the vrml.open()- or lg3d.open()-
-	function and closed using the vrml.close()- or lg3d.close()-function.
+	Livegraphics3D-environment created by calling the vrml.open() or lg3d.open()
+	function and closed using the vrml.close() or lg3d.close() function.
   
 }
 \value{
@@ -44,6 +44,13 @@ axis3d(lab.axis = c("X-axis", "Y-axis", "Z-axis"),
   or Livegraphics3D-file) and has no return value.
 }
 \author{ Enrico Glaab }
+\references{
+	
+	Enrico Glaab, Jonathan M. Garibaldi, Natalio Krasnogor (2010).  vrmlgen: An R Package for
+	3D Data Visualization on the Web. \emph{Journal of Statistical Software, 36(8)}, p. 1-18.
+	URL: \url{http://www.jstatsoft.org/v36/i08/}
+	
+}
 \seealso{ \link{text3d}, \link{lines3d}}
 \examples{
 
@@ -53,8 +60,8 @@ outdir <- tempdir()
 setwd(outdir)
 
 # start a new VRML environment
-vrml.open(file="axis_example.wrl", scale=5,
-          html.embed="axis.html")
+vrml.open(file = "axis_example.wrl", scale = 5,
+          html.embed = "axis.html")
 
 	# draw a coordinate system with dark blue axes
 	# and dark gray axis labels
@@ -62,8 +69,8 @@ vrml.open(file="axis_example.wrl", scale=5,
 	
 	# plot random data points within the coordinate system
 	# (increase point size by a factor of 2)
-	mat <- matrix(runif(99, 0, 1), ncol=3)
-	points3d(mat, col="red", scale = 2)
+	mat <- matrix(runif(99, 0, 1), ncol = 3)
+	points3d(mat, col = "red", scale = 2)
 
 # close the VRML environment and write the output file
 vrml.close()
@@ -71,10 +78,10 @@ vrml.close()
 # show the output in a web-browser 
 # (VRML-plugin must be installed!)
 if(file.exists(paste("file://",file.path(outdir,
-                "axis.html"), sep="")))
+                "axis.html"), sep = "")))
 {
   browseURL(paste("file://",file.path(outdir,
-                  "axis.html"), sep=""))
+                  "axis.html"), sep = ""))
 }
 
 setwd(curdir)

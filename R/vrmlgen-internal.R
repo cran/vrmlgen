@@ -1837,7 +1837,7 @@ function (infile = NULL, x = NULL, y = NULL, z = NULL, edges = NULL,
         }
                 
         # write the data point coordinates
-        write(paste("Transform {\nscale 1.0 1.0 1.0\n\tchildren [\n\t\tShape {\n\t\t\tappearance Appearance{ material Material{ transparency 0}}\n", 
+        write(paste("Transform {\nscale 1.0 1.0 1.0\n\tchildren [\n\t\tShape {\n\t\t\tappearance Appearance{ material Material{ transparency ",transparency,"}}\n", 
             sep = " "), file = filename, append = TRUE)
             
         write(paste("\n\t\t\tgeometry IndexedFaceSet {\n\t\t\tcoord DEF\n\tVertexArray Coordinate{\n\tpoint [\n", 

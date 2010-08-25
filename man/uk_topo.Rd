@@ -10,7 +10,7 @@
 \usage{data(uk_topo)}
 \details{
   This dataset contains very rough height map data for the islands
-  of the United Kingdom as example input for the bar3d-function.
+  of the United Kingdom as example input for the bar3d function.
 }
 \source{  
   The data was obtained from a gray scale topographic image of

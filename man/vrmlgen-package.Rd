@@ -13,9 +13,9 @@ Apart from providing access to low-level plotting functions (points, lines, text
 \tabular{ll}{
 Package: \tab vrmlgen\cr
 Type: \tab Package\cr
-Version: \tab 1.4.4\cr
-Date: \tab Date: 2010-6-10\cr
-License: \tab GPL-3\cr
+Version: \tab 1.4.6\cr
+Date: \tab Date: 2010-08-25\cr
+License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 URL: \tab http://www.cs.nott.ac.uk/~egg/vrmlgen\cr
 }
@@ -26,6 +26,14 @@ Enrico Glaab
 e.glaab@cs.nott.ac.uk
 }
 
+\references{
+	
+	Enrico Glaab, Jonathan M. Garibaldi, Natalio Krasnogor (2010).  vrmlgen: An R Package for
+	3D Data Visualization on the Web. \emph{Journal of Statistical Software, 36(8)}, p. 1-18.
+	URL: \url{http://www.jstatsoft.org/v36/i08/}
+	
+}
+
 \keyword{ package }
 \examples{
 
@@ -34,15 +42,15 @@ outdir <- tempdir()
 setwd(outdir)
 
 # create 33x3 matrix with random 3D input data
-mat <- matrix(runif(99, 0, 3), ncol=3)
+mat <- matrix(runif(99, 0, 3), ncol = 3)
 
 # create random class assignment vector with three classes
 y <- round(runif(33, 0, 2))
 y <- ifelse(y == 0, "class 1", ifelse(y == 1, "class 2", "class 3"))
 
 # create ouput using numbers from 1 to length(y) as metalabels
-cloud3d(mat, labels=y, metalabels=1:length(y), col.axis="black", col.lab="blue",
-col.bg="white")
+cloud3d(mat, labels = y, metalabels = 1:length(y), col.axis = "black", col.lab = "blue",
+col.bg = "white")
 
 setwd(curdir)
 
