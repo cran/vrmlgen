@@ -89,12 +89,14 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
     
     		# obtain the general settings from the
     		# higher level environment
-        filename <- .vrmlgenEnv$filename
-        htmlout <- .vrmlgenEnv$html
-        hheight <- .vrmlgenEnv$hheight
-        hwidth <- .vrmlgenEnv$hwidth
+    		
+    		vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        filename <- vrmlgenEnv$filename
+        htmlout <- vrmlgenEnv$html
+        hheight <- vrmlgenEnv$hheight
+        hwidth <- vrmlgenEnv$hwidth
         curdir <- getwd()
-        setwd(.vrmlgenEnv$VRMLDir)
+        setwd(vrmlgenEnv$VRMLDir)
         
     }
     
@@ -275,7 +277,7 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
         }
         
         # copy the Livegraphics3D live.jar to the output directory                
-        datadir <- system.file("data", package = "vrmlgen")       	
+        datadir <- system.file("extdata", package = "vrmlgen")       	
        	curdir <- getwd()
        	
        	# use if file.exists
@@ -352,12 +354,13 @@ function (x, y = NULL, z = NULL, labels = rownames(data), metalabels = NULL,
         
         # obtain the general settings from the
     		# higher level environment
-        filename <- .vrmlgenEnv$filename
-        htmlout <- .vrmlgenEnv$html
-        hheight <- .vrmlgenEnv$hheight
-        hwidth <- .vrmlgenEnv$hwidth
+    		vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        filename <- vrmlgenEnv$filename
+        htmlout <- vrmlgenEnv$html
+        hheight <- vrmlgenEnv$hheight
+        hwidth <- vrmlgenEnv$hwidth
         curdir <- getwd()
-        setwd(.vrmlgenEnv$VRMLDir)
+        setwd(vrmlgenEnv$VRMLDir)
     }
     
     # apply the chosen scaling method
@@ -506,7 +509,7 @@ function (x, y = NULL, z = NULL, labels = rownames(data), metalabels = NULL,
         }
         
         # copy the Livegraphics3D live.jar to the output directory
-				datadir <- system.file("data", package = "vrmlgen")       	
+				datadir <- system.file("extdata", package = "vrmlgen")    	
        	curdir <- getwd()
        	
         if (data.class(result<-try(file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar")), TRUE))=="try-error")
@@ -737,12 +740,13 @@ function (xfun = "sin(v)*cos(u)", yfun = "sin(v)*sin(u)", zfun = "cos(v)",
     
     		# obtain the general settings from the
     		# higher level environment
-        filename <- .vrmlgenEnv$filename
-        htmlout <- .vrmlgenEnv$html
-        hheight <- .vrmlgenEnv$hheight
-        hwidth <- .vrmlgenEnv$hwidth
+        vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        filename <- vrmlgenEnv$filename
+        htmlout <- vrmlgenEnv$html
+        hheight <- vrmlgenEnv$hheight
+        hwidth <- vrmlgenEnv$hwidth
         curdir <- getwd()
-        setwd(.vrmlgenEnv$VRMLDir)
+        setwd(vrmlgenEnv$VRMLDir)
     }
     
     # apply the chosen scaling method
@@ -833,7 +837,7 @@ function (xfun = "sin(v)*cos(u)", yfun = "sin(v)*sin(u)", zfun = "cos(v)",
 
 				
        	# copy the Livegraphics3D live.jar to the output directory
-       	datadir <- system.file("data", package = "vrmlgen")       	
+       	datadir <- system.file("extdata", package = "vrmlgen")
        	curdir <- getwd()
        	
         if (data.class(result<-try(file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar")), TRUE))=="try-error")
@@ -941,13 +945,14 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
     }
     else {
     
-        filename <- .vrmlgenEnv$filename
-        htmlout <- .vrmlgenEnv$html
-        hheight <- .vrmlgenEnv$hheight
-        hwidth <- .vrmlgenEnv$hwidth
-        scale <- .vrmlgenEnv$scale
+        vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        filename <- vrmlgenEnv$filename
+        htmlout <- vrmlgenEnv$html
+        hheight <- vrmlgenEnv$hheight
+        hwidth <- vrmlgenEnv$hwidth
+        scale <- vrmlgenEnv$scale
         curdir <- getwd()
-        setwd(.vrmlgenEnv$VRMLDir)
+        setwd(vrmlgenEnv$VRMLDir)
     }
     
     # scale the data to fit within the axes ranges
@@ -1237,14 +1242,15 @@ function (x, y = NULL, z = NULL, labels = rownames(data), metalabels = NULL,
         
         # obtain the general settings from the
     		# higher level environment
-        filename <- .vrmlgenEnv$filename
-        htmlout <- .vrmlgenEnv$html
-        VRMLDir <- .vrmlgenEnv$VRMLDir
-        hheight <- .vrmlgenEnv$hheight
-        hwidth <- .vrmlgenEnv$hwidth
-        scale <- .vrmlgenEnv$scale
+        vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        filename <- vrmlgenEnv$filename
+        htmlout <- vrmlgenEnv$html
+        VRMLDir <- vrmlgenEnv$VRMLDir
+        hheight <- vrmlgenEnv$hheight
+        hwidth <- vrmlgenEnv$hwidth
+        scale <- vrmlgenEnv$scale
         curdir <- getwd()
-        setwd(.vrmlgenEnv$VRMLDir)
+        setwd(vrmlgenEnv$VRMLDir)
     }
     
     # apply the chosen scaling method
@@ -1803,13 +1809,14 @@ function (infile = NULL, x = NULL, y = NULL, z = NULL, edges = NULL,
         
         		# obtain the general settings from the
     				# higher level environment
-            filename <- .vrmlgenEnv$filename
-            htmlout <- .vrmlgenEnv$html
-            hheight <- .vrmlgenEnv$hheight
-            hwidth <- .vrmlgenEnv$hwidth
-            scale <- .vrmlgenEnv$scale
+            vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+            filename <- vrmlgenEnv$filename
+            htmlout <- vrmlgenEnv$html
+            hheight <- vrmlgenEnv$hheight
+            hwidth <- vrmlgenEnv$hwidth
+            scale <- vrmlgenEnv$scale
             curdir <- getwd()
-            setwd(.vrmlgenEnv$VRMLDir)
+            setwd(vrmlgenEnv$VRMLDir)
         }
         
                 

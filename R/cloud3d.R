@@ -16,7 +16,8 @@ function (x, y = NULL, z = NULL, labels = rownames(data), filename = "out.wrl",
     # if called within a higher-level VRML or 
     # Livegraphics3D-environment, get the plot type
     if (exists(".vrmlgenEnv")) {
-        type <- .vrmlgenEnv$type
+    		vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        type <- vrmlgenEnv$type
     }
     
     

@@ -17,7 +17,8 @@ function (xfun = "sin(v)*cos(u)", yfun = "sin(v)*sin(u)", zfun = "cos(v)",
     # if called within a higher-level VRML or 
     # Livegraphics3D-environment, get the plot type
     if (exists(".vrmlgenEnv")) {
-        type <- .vrmlgenEnv$type
+    		vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        type <- vrmlgenEnv$type
     }
     
     # call lower-level plotting functions

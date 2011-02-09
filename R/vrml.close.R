@@ -6,11 +6,12 @@ function ()
 {
             
     # read global VRML parameters
-    filename <- .vrmlgenEnv$filename
-    htmlout <- .vrmlgenEnv$html
-    VRMLDir <- .vrmlgenEnv$VRMLDir
-    hheight <- .vrmlgenEnv$hheight
-    hwidth <- .vrmlgenEnv$hwidth
+    vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+    filename <- vrmlgenEnv$filename
+    htmlout <- vrmlgenEnv$html
+    VRMLDir <- vrmlgenEnv$VRMLDir
+    hheight <- vrmlgenEnv$hheight
+    hwidth <- vrmlgenEnv$hwidth
     
     
     # catch calling of vrml.close without previous
@@ -18,7 +19,7 @@ function ()
     curwarn.setting <- as.numeric(options("warn"))
     options(warn = 2)
         
-    if (data.class(result <- try(rm(.vrmlgenEnv, envir = .GlobalEnv), 
+    if (data.class(result <- try(rm(".vrmlgenEnv", envir = .GlobalEnv), 
         TRUE)) == "try-error") {
         options(warn = curwarn.setting)
         warning("You are trying to apply vrml.close() without having used vrml.open() before")

@@ -6,21 +6,22 @@ function ()
 {
     
     # read global Livegraphics3D parameters
-    filename <- .vrmlgenEnv$filename
-    htmlout <- .vrmlgenEnv$html
-    VRMLDir <- .vrmlgenEnv$VRMLDir
-    hheight <- .vrmlgenEnv$hheight
-    hwidth <- .vrmlgenEnv$hwidth
-    scale <- .vrmlgenEnv$scale
-    col.bg <- .vrmlgenEnv$col
-    ambientlight <- .vrmlgenEnv$ambientlight
+    vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+    filename <- vrmlgenEnv$filename
+    htmlout <- vrmlgenEnv$html
+    VRMLDir <- vrmlgenEnv$VRMLDir
+    hheight <- vrmlgenEnv$hheight
+    hwidth <- vrmlgenEnv$hwidth
+    scale <- vrmlgenEnv$scale
+    col.bg <- vrmlgenEnv$col
+    ambientlight <- vrmlgenEnv$ambientlight
         
     # catch calling of vrml.close without previous
     # vrml.open-call as an error and show warning message    
     curwarn.setting <- as.numeric(options("warn"))    
     options(warn = 2)
     
-    if (data.class(result <- try(rm(.vrmlgenEnv, envir = .GlobalEnv), 
+    if (data.class(result <- try(rm(".vrmlgenEnv", envir = .GlobalEnv), 
         TRUE)) == "try-error") {
         options(warn = curwarn.setting)
         warning("You are trying to apply vrml.close() without having used vrml.open() before")
@@ -40,7 +41,7 @@ function ()
     file.copy(filename, paste(curdir, filename, sep = "/"), overwrite = TRUE)
     file.remove(filename)
     
-    datadir <- system.file("data", package = "vrmlgen")
+    datadir <- system.file("extdata", package = "vrmlgen")
     if (data.class(result<-try(file.copy(file.path(datadir, "live.jar"), file.path(curdir, "live.jar")), TRUE))=="try-error")
     {
       warning("\nCannot copy file live.jar from vrlmgen-folder to current directory. You might need to copy the file manually.")

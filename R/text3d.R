@@ -11,7 +11,8 @@ function (x, y = NULL, z = NULL, text, col = "black", fontweight = "normal",
     if (exists(".vrmlgenEnv")) {
                         
         curdir <- getwd()
-        setwd(.vrmlgenEnv$VRMLDir)
+        vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        setwd(vrmlgenEnv$VRMLDir)
         
         # extract the coordinate vectors from the input
         
@@ -26,7 +27,7 @@ function (x, y = NULL, z = NULL, text, col = "black", fontweight = "normal",
             stop("\nNumber of coordinates does not match to length of string vector in text3d-function!\n")
         
         # create VRML output with lower-level drawing function
-        if (.vrmlgenEnv$type == "vrml") {
+        if (vrmlgenEnv$type == "vrml") {
             
             # apply font settings
             if (fontweight == "normal") 
@@ -36,8 +37,8 @@ function (x, y = NULL, z = NULL, text, col = "black", fontweight = "normal",
             fontfamily < toupper(fontfamily)
             
             # draw text
-            .vrmltext(.vrmlgenEnv$scale * x, .vrmlgenEnv$scale * 
-                y, .vrmlgenEnv$scale * z, text, .vrmlgenEnv$filename, 
+            .vrmltext(vrmlgenEnv$scale * x, vrmlgenEnv$scale * 
+                y, vrmlgenEnv$scale * z, text, vrmlgenEnv$filename, 
                 col, scale, rot, fontfamily, fontweight, hyperlink)
         }
         
@@ -55,7 +56,7 @@ function (x, y = NULL, z = NULL, text, col = "black", fontweight = "normal",
                 fontfamily <- "Times"
             
             # draw text
-            .lg3dtext(x, y, z, text, .vrmlgenEnv$filename, col, 
+            .lg3dtext(x, y, z, text, vrmlgenEnv$filename, col, 
                 scale, fontfamily, fontweight, hyperlink)
         }
         setwd(curdir)

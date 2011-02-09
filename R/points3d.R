@@ -10,7 +10,8 @@ function (x, y = NULL, z = NULL, col = "black", pointstyle = "s",
     if (exists(".vrmlgenEnv")) {
         
         curdir <- getwd()
-        setwd(.vrmlgenEnv$VRMLDir)
+        vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        setwd(vrmlgenEnv$VRMLDir)
         
         # extract the coordinate vectors from the input        
         xyz_parse <- xyz.coords(x, y, z)
@@ -26,15 +27,15 @@ function (x, y = NULL, z = NULL, col = "black", pointstyle = "s",
         # call low-level plotting functions
         # for VRML or Livegraphics3D output
         
-        if (.vrmlgenEnv$type == "vrml") {
+        if (vrmlgenEnv$type == "vrml") {
             
-            .vrmlpoints(x, y, z, .vrmlgenEnv$filename, rcol, 
-                gcol, bcol, pointstyle, hyperlinks, .vrmlgenEnv$scale, 
+            .vrmlpoints(x, y, z, vrmlgenEnv$filename, rcol, 
+                gcol, bcol, pointstyle, hyperlinks, vrmlgenEnv$scale, 
                 scale, transparency)
         }
         else {
         
-            .lg3dpoints(x, y, z, .vrmlgenEnv$filename, rcol, 
+            .lg3dpoints(x, y, z, vrmlgenEnv$filename, rcol, 
                 gcol, bcol, pointstyle, hyperlinks, 1, scale)
         }
         

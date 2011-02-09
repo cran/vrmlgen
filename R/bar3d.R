@@ -18,7 +18,8 @@ function (data, row.labels = rownames(data), col.labels = colnames(data),
     # if called within a higher-level VRML or 
     # Livegraphics3D-environment, get the plot type
     if (exists(".vrmlgenEnv")) {
-        type <- .vrmlgenEnv$type
+        vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        type <- vrmlgenEnv$type
     }
     
     # call low-level plotting functions

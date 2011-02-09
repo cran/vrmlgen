@@ -12,10 +12,11 @@ function (lab.axis = c("X-axis", "Y-axis", "Z-axis"), filename = NULL,
     if (exists(".vrmlgenEnv")) {
     
     		# read global 3D scene settings
-        type <- .vrmlgenEnv$type
-        filename <- .vrmlgenEnv$filename
-        global_scale <- .vrmlgenEnv$scale
-        setwd(.vrmlgenEnv$VRMLDir)
+    		vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        type <- vrmlgenEnv$type
+        filename <- vrmlgenEnv$filename
+        global_scale <- vrmlgenEnv$scale
+        setwd(vrmlgenEnv$VRMLDir)
     }
     
     # set the axis and label colors

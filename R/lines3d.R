@@ -9,7 +9,8 @@ function (x, y = NULL, z = NULL, col = "black", lwd = 1)
     if (exists(".vrmlgenEnv")) {
     
         curdir <- getwd()
-        setwd(.vrmlgenEnv$VRMLDir)
+        vrmlgenEnv <- get(".vrmlgenEnv",envir=.GlobalEnv)
+        setwd(vrmlgenEnv$VRMLDir)
         
         # extract the coordinate vectors from the input        
         xyz_parse <- xyz.coords(x, y, z)
@@ -26,7 +27,7 @@ function (x, y = NULL, z = NULL, col = "black", lwd = 1)
         # call low-level plotting functions
         # for VRML or Livegraphics3D output
         
-        if (.vrmlgenEnv$type == "vrml") {
+        if (vrmlgenEnv$type == "vrml") {
             
             # for VRML the start- and end-points
             # of lines must be converted into
@@ -88,19 +89,19 @@ function (x, y = NULL, z = NULL, col = "black", lwd = 1)
                                     
                   if (is.null(rot)) 
                     write(paste("Transform {\n\ttranslation ", 
-                      x[i] * .vrmlgenEnv$scale, y[i] * .vrmlgenEnv$scale, 
-                      z[i] * .vrmlgenEnv$scale, "\n\tchildren Shape {\n\t\tappearance Appearance { material Material {\n\t\tdiffuseColor ", 
+                      x[i] * vrmlgenEnv$scale, y[i] * vrmlgenEnv$scale, 
+                      z[i] * vrmlgenEnv$scale, "\n\tchildren Shape {\n\t\tappearance Appearance { material Material {\n\t\tdiffuseColor ", 
                       rcol, gcol, bcol, " } }\n\tgeometry Cylinder { height ", 
-                      len * .vrmlgenEnv$scale, "radius", 0.04 * 
-                        lwd, " }\n\t}\n}", sep = " "), file = .vrmlgenEnv$filename, 
+                      len * vrmlgenEnv$scale, "radius", 0.04 * 
+                        lwd, " }\n\t}\n}", sep = " "), file = vrmlgenEnv$filename, 
                       append = TRUE)
                   else write(paste("Transform {\n\ttranslation ", 
-                    x[i] * .vrmlgenEnv$scale, y[i] * .vrmlgenEnv$scale, 
-                    z[i] * .vrmlgenEnv$scale, "\n\trotation", 
+                    x[i] * vrmlgenEnv$scale, y[i] * vrmlgenEnv$scale, 
+                    z[i] * vrmlgenEnv$scale, "\n\trotation", 
                     rot[1], rot[2], rot[3], rot[4], "\n\tchildren Shape {\n\t\tappearance Appearance { material Material {\n\t\tdiffuseColor ", 
                     rcol, gcol, bcol, " } }\n\tgeometry Cylinder { height ", 
-                    len * .vrmlgenEnv$scale, "radius", 0.04 * 
-                      lwd, " }\n\t}\n}", sep = " "), file = .vrmlgenEnv$filename, 
+                    len * vrmlgenEnv$scale, "radius", 0.04 * 
+                      lwd, " }\n\t}\n}", sep = " "), file = vrmlgenEnv$filename, 
                     append = TRUE)
             }
         }
@@ -109,14 +110,14 @@ function (x, y = NULL, z = NULL, col = "black", lwd = 1)
                                   
                   # draw line in Livegraphics3D-format
                   
-                  write(paste("Thickness[", 0.005 * lwd/.vrmlgenEnv$scale, 
+                  write(paste("Thickness[", 0.005 * lwd/vrmlgenEnv$scale, 
                     "], RGBColor[", rcol, ",", gcol, ",", bcol, 
-                    "], Line[{{", x[i] * .vrmlgenEnv$scale, ",", 
-                    y[i] * .vrmlgenEnv$scale, ",", z[i] * .vrmlgenEnv$scale, 
-                    "},{", x[i + 1] * .vrmlgenEnv$scale, ",", 
-                    y[i + 1] * .vrmlgenEnv$scale, ",", z[i + 
-                      1] * .vrmlgenEnv$scale, "}}],", sep = " "), 
-                    file = .vrmlgenEnv$filename, append = TRUE)
+                    "], Line[{{", x[i] * vrmlgenEnv$scale, ",", 
+                    y[i] * vrmlgenEnv$scale, ",", z[i] * vrmlgenEnv$scale, 
+                    "},{", x[i + 1] * vrmlgenEnv$scale, ",", 
+                    y[i + 1] * vrmlgenEnv$scale, ",", z[i + 
+                      1] * vrmlgenEnv$scale, "}}],", sep = " "), 
+                    file = vrmlgenEnv$filename, append = TRUE)
 
             }
         }
